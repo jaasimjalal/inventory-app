@@ -1412,3 +1412,34 @@ tbody tr {
     font-size: 0.7rem;
   }
 }
+
+@media (max-width: 420px) {
+  .table-section {
+    padding: 0.3rem;
+  }
+  .table-section .table-controls {
+    padding: 0;
+  }
+  .table-controls {
+    gap: 0;
+  }
+  .table-controls-left {
+    gap: 0.15rem;
+  }
+  .table-controls .table-actions {
+    gap: 0.15rem;
+  }
+  .table-controls #recordCount {
+    font-size: 0.55rem;
+    padding: 0.05rem 0.25rem;
+  }
+  .table-controls .pill-btn {
+    font-size: 0.55rem;
+    padding: 0.05rem 0.25rem;
+  }
+  .table-controls #exportExcelBtn,
+  .table-controls #refreshBtn {
+    font-size: 0.55rem;
+    padding: 0.05rem 0.3rem;
+  }
+}
