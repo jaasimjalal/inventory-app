@@ -123,7 +123,8 @@ var InventoryDB = {
         self._data = data || [];
         return self._data;
       })
-      .catch(function() {
+      .catch(function(e) {
+        console.error('Supabase GET error:', e.message);
         self._data = [];
         return self._data;
       });
