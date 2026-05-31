@@ -1158,7 +1158,6 @@ tbody tr {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
     gap: 0.25rem;
   }
 
@@ -1166,6 +1165,10 @@ tbody tr {
     display: flex;
     align-items: center;
     gap: 0.25rem;
+  }
+
+  .table-controls #refreshBtn {
+    margin-left: auto;
   }
 
   .table-controls .pagination-controls {
