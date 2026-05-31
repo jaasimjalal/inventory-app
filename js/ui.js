@@ -149,9 +149,9 @@ const UI = {
     document.getElementById('workerNumberGroup').style.display = 'none';
     document.getElementById('workerNumber').required = false;
 
-    document.getElementById('formTitle').textContent = 'Add New Record';
+    document.getElementById('formTitle').textContent = 'Register Part';
     document.getElementById('editBadge').classList.add('hidden');
-    document.getElementById('saveBtn').textContent = 'Save Record';
+    document.getElementById('saveBtn').textContent = 'Register';
 
     document.getElementById('typeOfWork').value = '';
     document.getElementById('availabilityStatus').value = '';
