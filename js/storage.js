@@ -125,8 +125,7 @@ var InventoryDB = {
     var headers = {
       'apikey': this._supabaseKey,
       'Authorization': 'Bearer ' + this._supabaseKey,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=representation'
+      'Content-Type': 'application/json'
     };
     var opts = {
       method: method,
@@ -137,8 +136,8 @@ var InventoryDB = {
     }
     return fetch(url, opts).then(function(res) {
       if (!res.ok) throw new Error('API error ' + res.status);
-      if (method === 'DELETE' || method === 'PATCH') return null;
-      return res.json();
+      if (method === 'DELETE') return null;
+      return res.json().catch(function() { return null; });
     });
   },
 
