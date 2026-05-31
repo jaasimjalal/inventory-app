@@ -1156,11 +1156,10 @@ tbody tr {
   .table-controls {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
-    gap: 0.15rem;
-    overflow: hidden;
+    justify-content: flex-start;
+    gap: 0.2rem;
   }
 
   .table-controls-left {
