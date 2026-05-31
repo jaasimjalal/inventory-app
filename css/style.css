@@ -1147,6 +1147,21 @@ tbody tr {
     max-width: 100%;
   }
 
+  .info-note {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.72rem;
+    margin-top: 0.5rem;
+  }
+
+  .info-note-title {
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .info-note-item + .info-note-item {
+    margin-top: 0.15rem;
+  }
+
   table, thead, tbody, tr, th, td {
     display: block;
   }
