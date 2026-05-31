@@ -32,6 +32,7 @@ var InventoryDB = {
     var self = this;
     this._data.push(record);
     this._apiCall('POST', '', record).catch(function(e) {
+      console.error('Supabase POST error:', e.message);
       self._showSyncError('Failed to save record to cloud');
     });
     return record;
@@ -47,6 +48,7 @@ var InventoryDB = {
       record[keys[i]] = updatedFields[keys[i]];
     }
     this._apiCall('PATCH', '?id=eq.' + encodeURIComponent(id), updatedFields).catch(function(e) {
+      console.error('Supabase PATCH error:', e.message);
       self._showSyncError('Failed to update record in cloud');
     });
     return record;
@@ -58,6 +60,7 @@ var InventoryDB = {
     if (index === -1) return false;
     this._data.splice(index, 1);
     this._apiCall('DELETE', '?id=eq.' + encodeURIComponent(id)).catch(function(e) {
+      console.error('Supabase DELETE error:', e.message);
       self._showSyncError('Failed to delete record from cloud');
     });
     return true;
@@ -145,8 +148,12 @@ var InventoryDB = {
     }
     return fetch(url, opts).then(function(res) {
       if (!res.ok) {
-        return res.text().then(function(text) {
-          throw new Error('API error ' + res.status + ': ' + text);
+        return res.clone().json().then(function(body) {
+          throw new Error('API error ' + res.status + ': ' + (body.message || JSON.stringify(body)));
+        }).catch(function() {
+          return res.text().then(function(text) {
+            throw new Error('API error ' + res.status + ': ' + (text || '(no body)'));
+          });
         });
       }
       if (method === 'DELETE') return null;
