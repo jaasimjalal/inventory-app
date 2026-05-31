@@ -18,9 +18,11 @@ const UI = {
 
     const toggle = () => {
       if (typeSelect.value === 'Worker') {
+        workerGroup.hidden = false;
         workerGroup.style.display = 'flex';
         workerInput.required = true;
       } else {
+        workerGroup.hidden = true;
         workerGroup.style.display = 'none';
         workerInput.required = false;
         workerInput.value = '';
@@ -113,10 +115,12 @@ const UI = {
     const workerInput = document.getElementById('workerNumber');
     document.getElementById('typeOfWork').value = record.typeOfWork;
     if (record.typeOfWork === 'Worker') {
+      workerGroup.hidden = false;
       workerGroup.style.display = 'flex';
       workerInput.required = true;
       workerInput.value = record.workerNumber || '';
     } else {
+      workerGroup.hidden = true;
       workerGroup.style.display = 'none';
       workerInput.required = false;
       workerInput.value = '';
@@ -146,7 +150,9 @@ const UI = {
   clearForm() {
     document.getElementById('editId').value = '';
     document.getElementById('recordForm').reset();
-    document.getElementById('workerNumberGroup').style.display = 'none';
+    const wg = document.getElementById('workerNumberGroup');
+    wg.hidden = true;
+    wg.style.display = 'none';
     document.getElementById('workerNumber').required = false;
 
     document.getElementById('formTitle').textContent = 'Register Part';
