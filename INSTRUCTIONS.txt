@@ -1,0 +1,53 @@
+=== HOW TO USE PARTS INVENTORY SYSTEM ===
+
+
+== STARTING THE SERVER ==
+
+1. Double-click "start.bat" in the project folder.
+   - A command window will open showing the server URLs.
+   - Your browser will automatically open the app.
+
+2. To stop the server:
+   - Click on the command window and press Ctrl+C.
+
+
+== ACCESSING FROM OTHER DEVICES ==
+
+1. Make sure all devices are on the same network (same Wi-Fi).
+
+2. After starting the server, look for line that says:
+     Network:  http://192.168.x.x:8080/
+
+3. On another device (phone, tablet, another PC), open a browser
+   and type that full URL (e.g. http://192.168.1.5:8080/).
+
+
+== USING THE APP ==
+
+1. Add a Record:
+   - Fill in Part Number, Part Name, Model, Chassis, Quantity.
+   - Select Type of Work (Counter or Worker).
+   - If "Worker" is selected, enter the Worker Number.
+   - Click "Save Record".
+
+2. Edit a Record:
+   - Click the pencil (edit) icon in the Actions column.
+   - Update the fields and click "Save Record".
+
+3. Mark as Received:
+   - Click the toggle switch in the Received column.
+   - Enter the received date and confirm.
+
+4. Delete a Record:
+   - Click the trash icon in the Actions column.
+   - Confirm deletion.
+
+5. Search / Filter:
+   - Use the search box to find by Part Number, Name, Model, or Chassis.
+   - Use dropdowns to filter by Type of Work or Availability.
+
+
+== NOTES ==
+
+- Data is saved automatically to the "data" folder.
+- The server must be running to access the app from other devices.

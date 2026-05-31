@@ -1,0 +1,301 @@
+const App = {
+  currentRecords: [],
+  actionRequiredFilter: false,
+
+  init() {
+    var self = this;
+    var result = InventoryDB.init();
+    if (result && typeof result.then === 'function') {
+      result.then(function() {
+        UI.init();
+        self.setupEventListeners();
+        self.refresh();
+      });
+    } else {
+      UI.init();
+      this.setupEventListeners();
+      this.refresh();
+    }
+  },
+
+  setupEventListeners() {
+    const form = document.getElementById('recordForm');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      this.handleFormSubmit();
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      UI.clearForm();
+    });
+
+    document.getElementById('tableBody').addEventListener('click', (e) => {
+      const toggleBtn = e.target.closest('.received-toggle-btn');
+      if (toggleBtn) {
+        this.handleToggle(toggleBtn.dataset.id, toggleBtn.dataset.received === 'true');
+        return;
+      }
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      const id = btn.dataset.id;
+      if (!id) return;
+
+      if (btn.classList.contains('btn-edit')) {
+        this.handleEdit(id);
+      } else if (btn.classList.contains('btn-delete')) {
+        this.handleDelete(id);
+      }
+    });
+
+    const searchInput = document.getElementById('searchInput');
+    let searchTimer;
+    searchInput.addEventListener('input', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        UI.currentPage = 1;
+        this.refresh();
+      }, 300);
+    });
+
+    document.getElementById('filterTypeOfWork').addEventListener('change', () => {
+      UI.currentPage = 1;
+      this.refresh();
+    });
+
+    document.getElementById('filterAvailability').addEventListener('change', () => {
+      UI.currentPage = 1;
+      this.refresh();
+    });
+
+    document.getElementById('filterReceived').addEventListener('change', () => {
+      const showRange = document.getElementById('filterReceived').value === 'received';
+      document.getElementById('receivedDateRange').classList.toggle('hidden', !showRange);
+      UI.currentPage = 1;
+      this.refresh();
+    });
+
+    const todayStr = () => new Date().toISOString().split('T')[0];
+    document.getElementById('filterDateFrom').addEventListener('change', (e) => {
+      const dateTo = document.getElementById('filterDateTo');
+      dateTo.min = e.target.value || '';
+    });
+    document.getElementById('filterDateTo').addEventListener('change', () => {
+      UI.currentPage = 1;
+      this.refresh();
+    });
+    document.getElementById('filterDateTo').max = todayStr();
+
+    document.getElementById('prevPageBtn').addEventListener('click', () => {
+      if (UI.currentPage > 1) {
+        UI.currentPage--;
+        this.refresh();
+      }
+    });
+
+    document.getElementById('nextPageBtn').addEventListener('click', () => {
+      const total = this.currentRecords.length;
+      const totalPages = Math.max(1, Math.ceil(total / UI.pageSize));
+      if (UI.currentPage < totalPages) {
+        UI.currentPage++;
+        this.refresh();
+      }
+    });
+
+    document.getElementById('exportExcelBtn').addEventListener('click', () => {
+      this.exportExcel();
+    });
+  },
+
+  handleFormSubmit() {
+    const editId = document.getElementById('editId').value.trim();
+    const record = this.gatherFormData();
+
+    const existingRecords = InventoryDB.getAll();
+    const validation = Validator.validate(record, existingRecords, editId);
+
+    if (!validation.isValid) {
+      Validator.showFieldErrors(validation.errors);
+      return;
+    }
+
+    Validator.clearErrors();
+
+    if (editId) {
+      const result = InventoryDB.update(editId, record);
+      if (result) {
+        UI.showNotification('Record updated successfully.', 'success');
+      }
+    } else {
+      record.id = InventoryDB.generateId();
+      record.createdDate = this.getCurrentDateTime();
+      record.received = false;
+      InventoryDB.add(record);
+      UI.showNotification('Record added successfully.', 'success');
+    }
+
+    UI.clearForm();
+    this.refresh();
+  },
+
+  gatherFormData() {
+    return {
+      partNumber: document.getElementById('partNumber').value.trim(),
+      partName: document.getElementById('partName').value.trim(),
+      model: document.getElementById('model').value.trim(),
+      quantity: document.getElementById('quantity').value === '' ? '' : Number(document.getElementById('quantity').value),
+      chassis: document.getElementById('chassis').value.trim(),
+      typeOfWork: document.getElementById('typeOfWork').value,
+      workerNumber: document.getElementById('typeOfWork').value === 'Worker' ? document.getElementById('workerNumber').value.trim() : '',
+      availabilityStatus: document.getElementById('availabilityStatus').value
+    };
+  },
+
+  handleEdit(id) {
+    const record = InventoryDB.getById(id);
+    if (!record) {
+      UI.showNotification('Record not found.', 'error');
+      return;
+    }
+    UI.populateForm(record);
+  },
+
+  handleToggle(id, currentlyReceived) {
+    const record = InventoryDB.getById(id);
+    if (!record) return;
+
+    if (!currentlyReceived) {
+      UI.showReceivedDialog(record, id);
+    } else {
+      UI.showUnreceivedConfirm(record, id);
+    }
+  },
+
+  handleReceivedConfirm() {
+    const id = document.getElementById('receivedModal').dataset.recordId;
+    if (!id) return;
+
+    const isReceiveFlow = !document.getElementById('receivedModalBody').classList.contains('hidden');
+
+    if (isReceiveFlow) {
+      const dateInput = document.getElementById('receivedDateInput');
+      const dateVal = dateInput.value;
+      const errorEl = document.getElementById('receivedDateError');
+      if (!dateVal) {
+        errorEl.textContent = 'Received Date is required.';
+        return;
+      }
+      errorEl.textContent = '';
+      InventoryDB.update(id, { received: true, receivedDate: dateVal });
+      UI.hideReceivedDialog();
+      UI.showNotification('Marked as received.', 'success');
+    } else {
+      InventoryDB.update(id, { received: false, receivedDate: '' });
+      UI.hideReceivedDialog();
+      UI.showNotification('Marked as not received.', 'success');
+    }
+    this.refresh();
+  },
+
+  handleDelete(id) {
+    const record = InventoryDB.getById(id);
+    if (!record) return;
+    UI.showConfirmDialog(
+      `Delete record "${record.partNumber} - ${record.partName}"?`,
+      () => {
+        InventoryDB.delete(id);
+        UI.showNotification('Record deleted.', 'success');
+        this.refresh();
+      }
+    );
+  },
+
+  refresh() {
+    const query = document.getElementById('searchInput').value.trim();
+    const filters = {
+      typeOfWork: document.getElementById('filterTypeOfWork').value,
+      availabilityStatus: document.getElementById('filterAvailability').value,
+      received: document.getElementById('filterReceived').value,
+      receivedDateFrom: document.getElementById('filterDateFrom').value,
+      receivedDateTo: document.getElementById('filterDateTo').value,
+      actionRequired: this.actionRequiredFilter
+    };
+
+    let records = InventoryDB.search(query, filters);
+    records = UI.sortRecords(records);
+    this.currentRecords = records;
+
+    const allRecords = InventoryDB.search(query, {
+      typeOfWork: filters.typeOfWork,
+      availabilityStatus: filters.availabilityStatus,
+      received: filters.received,
+      receivedDateFrom: filters.receivedDateFrom,
+      receivedDateTo: filters.receivedDateTo
+    });
+    const actionCount = allRecords.filter(r => !r.availabilityStatus || !r.received).length;
+    document.getElementById('actionCount').textContent = actionCount;
+    document.getElementById('actionRequiredBtn').classList.toggle('active', this.actionRequiredFilter);
+
+    UI.renderTable(records);
+  },
+
+  exportExcel() {
+    const records = this.currentRecords;
+    if (records.length === 0) {
+      UI.showNotification('No records to export.', 'error');
+      return;
+    }
+
+    const headers = ['Part Number', 'Part Name', 'Model', 'Quantity', 'Chassis', 'Type of Work', 'Worker Number', 'Availability Status', 'Received', 'Received Date', 'Created Date'];
+    const rows = records.map(r => [
+      r.partNumber,
+      r.partName,
+      r.model,
+      r.quantity,
+      r.chassis,
+      r.typeOfWork,
+      r.typeOfWork === 'Worker' ? (r.workerNumber || '') : '-',
+      r.availabilityStatus,
+      r.received ? 'Yes' : 'No',
+      r.receivedDate || '-',
+      r.createdDate
+    ]);
+
+    let html = '<table>';
+    html += '<tr>' + headers.map(h => '<th>' + h + '</th>').join('') + '</tr>';
+    for (const row of rows) {
+      html += '<tr>' + row.map(c => '<td>' + String(c) + '</td>').join('') + '</tr>';
+    }
+    html += '</table>';
+
+    const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `inventory-${this.getCurrentDate()}.xls`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    UI.showNotification('Excel downloaded successfully.', 'success');
+  },
+
+  getCurrentDate() {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+  },
+
+  getCurrentDateTime() {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    const h = String(now.getHours()).padStart(2, '0');
+    const min = String(now.getMinutes()).padStart(2, '0');
+    const s = String(now.getSeconds()).padStart(2, '0');
+    return `${y}-${m}-${d} ${h}:${min}:${s}`;
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  App.init();
+});
