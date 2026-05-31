@@ -1,37 +1,46 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 192 192">
   <rect width="192" height="192" rx="32" fill="#0d9488"/>
 
-  <!-- Gear (cog) -->
-  <g transform="translate(96,96)">
-    <!-- Gear circle -->
-    <circle r="32" fill="#fff"/>
-
-    <!-- 8 gear teeth -->
-    <g fill="#fff">
-      <rect x="-6" y="-42" width="12" height="10" rx="2"/>
-      <rect x="-6" y="32" width="12" height="10" rx="2"/>
-      <rect x="-42" y="-6" width="10" height="12" rx="2"/>
-      <rect x="32" y="-6" width="10" height="12" rx="2"/>
-      <rect x="22" y="-36" width="10" height="12" rx="2" transform="rotate(45 27 -30)"/>
-      <rect x="-32" y="-36" width="10" height="12" rx="2" transform="rotate(-45 -27 -30)"/>
-      <rect x="22" y="24" width="10" height="12" rx="2" transform="rotate(-45 27 30)"/>
-      <rect x="-32" y="24" width="10" height="12" rx="2" transform="rotate(45 -27 30)"/>
+  <!-- Gear (behind car, top-right) -->
+  <g transform="translate(132,58)">
+    <circle r="20" fill="#fbbf24"/>
+    <g fill="#fbbf24">
+      <rect x="-4" y="-27" width="8" height="7" rx="1.5"/>
+      <rect x="-4" y="20" width="8" height="7" rx="1.5"/>
+      <rect x="-27" y="-4" width="7" height="8" rx="1.5"/>
+      <rect x="20" y="-4" width="7" height="8" rx="1.5"/>
+      <rect x="12" y="-23" width="7" height="8" rx="1.5" transform="rotate(45 15.5 -19)"/>
+      <rect x="-19" y="-23" width="7" height="8" rx="1.5" transform="rotate(-45 -15.5 -19)"/>
+      <rect x="12" y="15" width="7" height="8" rx="1.5" transform="rotate(-45 15.5 19)"/>
+      <rect x="-19" y="15" width="7" height="8" rx="1.5" transform="rotate(45 -15.5 19)"/>
     </g>
-
-    <!-- Inner cutout -->
-    <circle r="22" fill="#0d9488"/>
-    <!-- Center dot -->
-    <circle r="8" fill="#fff"/>
-    <circle r="4" fill="#0d9488"/>
+    <circle r="12" fill="#0d9488"/>
+    <circle r="4" fill="#fbbf24"/>
   </g>
 
-  <!-- Spanner (wrench) -->
-  <g transform="translate(78,84) rotate(-40)">
-    <!-- Handle -->
-    <rect x="-4.5" y="-36" width="9" height="48" rx="3.5" fill="#fbbf24"/>
-    <!-- Head jaw -->
-    <path d="M-10-36c-2-4-1-10 5-12c6-2 11 1 12 5l2 8h-14z" fill="#fbbf24"/>
-    <!-- Head cutout -->
-    <path d="M-5-34c-1-2 0-6 3-7c3-1 6 1 6 4" fill="none" stroke="#d97706" stroke-width="1.2"/>
+  <!-- Spanner (behind car, bottom-left) -->
+  <g transform="translate(60,140) rotate(40)">
+    <rect x="-3" y="-24" width="6" height="34" rx="2.5" fill="#fbbf24"/>
+    <path d="M-7-24c-1-3 0-7 3-9c3-2 7 1 8 4l1 5h-12z" fill="#fbbf24"/>
+  </g>
+
+  <!-- Car -->
+  <g transform="translate(86,90)">
+    <!-- Body -->
+    <rect x="-32" y="0" width="58" height="14" rx="3" fill="#fff"/>
+    <!-- Cabin -->
+    <rect x="-20" y="-12" width="28" height="12" rx="2.5" fill="#fff"/>
+    <!-- Windows -->
+    <rect x="-16" y="-9" width="9" height="7" rx="1.5" fill="#0d9488" opacity="0.3"/>
+    <rect x="-3" y="-9" width="9" height="7" rx="1.5" fill="#0d9488" opacity="0.3"/>
+    <!-- Hood slope -->
+    <path d="M8 0 L18 -6 L26 0 Z" fill="#fff"/>
+    <!-- Wheels -->
+    <circle cx="-14" cy="14" r="7" fill="#1e293b"/>
+    <circle cx="-14" cy="14" r="2.5" fill="#94a3b8"/>
+    <circle cx="16" cy="14" r="7" fill="#1e293b"/>
+    <circle cx="16" cy="14" r="2.5" fill="#94a3b8"/>
+    <!-- Headlight -->
+    <circle cx="24" cy="6" r="2" fill="#fbbf24"/>
   </g>
 </svg>
