@@ -2,7 +2,7 @@
   "name": "Inventory Management",
   "short_name": "Inventory",
   "description": "Workshop Inventory Management System",
-  "start_url": ".",
+  "start_url": "login.html",
   "display": "standalone",
   "background_color": "#f4f6f9",
   "theme_color": "#0d9488",
