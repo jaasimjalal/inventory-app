@@ -1085,8 +1085,32 @@ tbody tr {
     grid-template-columns: 1fr;
   }
 
-  .layout-left .form-section.card {
+  .layout-left   .form-section.card {
     padding: 0.85rem;
+  }
+
+  .section-title {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .section-title::after {
+    content: '\25BC';
+    font-size: 0.75rem;
+    transition: transform 0.25s;
+    color: var(--primary);
+  }
+
+  .form-section.card[data-collapsed] .section-title::after {
+    transform: rotate(-90deg);
+  }
+
+  .form-section.card[data-collapsed] #recordForm {
+    display: none;
   }
 
   .form-grid,

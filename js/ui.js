@@ -8,6 +8,7 @@ const UI = {
   init() {
     this.setupWorkTypeToggle();
     this.setupSortHandlers();
+    this.setupMobileAccordion();
   },
 
   setupWorkTypeToggle() {
@@ -86,6 +87,23 @@ const UI = {
     return sorted;
   },
 
+  setupMobileAccordion() {
+    var title = document.querySelector('.section-title');
+    if (!title) return;
+    title.addEventListener('click', function() {
+      if (window.innerWidth > 768) return;
+      var card = document.querySelector('.form-section.card');
+      if (card.hasAttribute('data-collapsed')) {
+        card.removeAttribute('data-collapsed');
+      } else {
+        card.setAttribute('data-collapsed', '');
+      }
+    });
+    if (window.innerWidth <= 768) {
+      document.querySelector('.form-section.card').setAttribute('data-collapsed', '');
+    }
+  },
+
   populateForm(record) {
     document.getElementById('editId').value = record.id;
     document.getElementById('partNumber').value = record.partNumber;
@@ -121,6 +139,9 @@ const UI = {
     document.getElementById('saveBtn').textContent = 'Update Record';
 
     Validator.clearErrors();
+    if (window.innerWidth <= 768) {
+      document.querySelector('.form-section.card').removeAttribute('data-collapsed');
+    }
     document.getElementById('recordForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
   },
 
