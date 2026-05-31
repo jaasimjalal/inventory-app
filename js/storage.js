@@ -63,28 +63,6 @@ var InventoryDB = {
     return true;
   },
 
-  update: function(id, updatedFields) {
-    var self = this;
-    var index = this._data.findIndex(function(r) { return r.id === id; });
-    if (index === -1) return null;
-    var record = this._data[index];
-    var keys = Object.keys(updatedFields);
-    for (var i = 0; i < keys.length; i++) {
-      record[keys[i]] = updatedFields[keys[i]];
-    }
-    this._apiCall('PATCH', '?id=eq.' + encodeURIComponent(id), updatedFields).catch(function() {});
-    return record;
-  },
-
-  delete: function(id) {
-    var self = this;
-    var index = this._data.findIndex(function(r) { return r.id === id; });
-    if (index === -1) return false;
-    this._data.splice(index, 1);
-    this._apiCall('DELETE', '?id=eq.' + encodeURIComponent(id)).catch(function() {});
-    return true;
-  },
-
   search: function(query, filters) {
     if (!filters) filters = {};
     var records = this._data;
@@ -159,11 +137,18 @@ var InventoryDB = {
       method: method,
       headers: headers
     };
+    if (method === 'POST' || method === 'PATCH') {
+      opts.headers['Prefer'] = 'return=minimal';
+    }
     if (body && (method === 'POST' || method === 'PATCH')) {
       opts.body = JSON.stringify(body);
     }
     return fetch(url, opts).then(function(res) {
-      if (!res.ok) throw new Error('API error ' + res.status);
+      if (!res.ok) {
+        return res.text().then(function(text) {
+          throw new Error('API error ' + res.status + ': ' + text);
+        });
+      }
       if (method === 'DELETE') return null;
       return res.json().catch(function() { return null; });
     });

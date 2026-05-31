@@ -155,7 +155,7 @@ const App = {
       partNumber: document.getElementById('partNumber').value.trim(),
       partName: document.getElementById('partName').value.trim(),
       model: document.getElementById('model').value.trim(),
-      quantity: document.getElementById('quantity').value === '' ? '' : Number(document.getElementById('quantity').value),
+      quantity: document.getElementById('quantity').value === '' ? null : Number(document.getElementById('quantity').value),
       chassis: document.getElementById('chassis').value.trim(),
       typeOfWork: document.getElementById('typeOfWork').value,
       workerNumber: document.getElementById('typeOfWork').value === 'Worker' ? document.getElementById('workerNumber').value.trim() : '',
