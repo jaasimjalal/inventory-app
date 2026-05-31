@@ -104,6 +104,15 @@ const App = {
     document.getElementById('exportExcelBtn').addEventListener('click', () => {
       this.exportExcel();
     });
+
+    document.getElementById('receivedConfirmBtn').addEventListener('click', () => {
+      this.handleReceivedConfirm();
+    });
+
+    document.getElementById('receivedCancelBtn').addEventListener('click', () => {
+      UI.hideReceivedDialog();
+      this.refresh();
+    });
   },
 
   handleFormSubmit() {
