@@ -1,23 +1,37 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
   <rect width="192" height="192" rx="32" fill="#0d9488"/>
-  <g transform="translate(96,96) scale(2.8)">
-    <!-- Car body -->
-    <path d="M-12 4h24c2 0 4-2 4-4v-6l-6-10h-8l-8 10h-10v6c0 2 2 4 4 4z" fill="#fff" opacity="0.95"/>
-    <!-- Roof -->
-    <path d="M-6 4l-2-6h16l2 6" fill="#0d9488" stroke="#fff" stroke-width="0.5"/>
-    <!-- Windows -->
-    <rect x="-4" y="-1" width="5" height="4" rx="0.5" fill="#0d9488" opacity="0.4"/>
-    <rect x="3" y="-1" width="5" height="4" rx="0.5" fill="#0d9488" opacity="0.4"/>
-    <!-- Wheels -->
-    <circle cx="-6" cy="6" r="3" fill="#1e293b"/>
-    <circle cx="-6" cy="6" r="1.2" fill="#fff" opacity="0.3"/>
-    <circle cx="6" cy="6" r="3" fill="#1e293b"/>
-    <circle cx="6" cy="6" r="1.2" fill="#fff" opacity="0.3"/>
-    <!-- Wrench -->
-    <g transform="translate(15,-12) rotate(25)">
-      <rect x="-1.5" y="-8" width="3" height="16" rx="1" fill="#fbbf24"/>
-      <path d="M-2-8c0-2 1-3 2-3s2 1 2 3l1 3h-6z" fill="#fbbf24"/>
-      <path d="M-2-8c0-2 1-3 2-3" fill="none" stroke="#d97706" stroke-width="0.5"/>
+
+  <!-- Gear (cog) -->
+  <g transform="translate(96,96)">
+    <!-- Gear circle -->
+    <circle r="32" fill="#fff"/>
+
+    <!-- 8 gear teeth -->
+    <g fill="#fff">
+      <rect x="-6" y="-42" width="12" height="10" rx="2"/>
+      <rect x="-6" y="32" width="12" height="10" rx="2"/>
+      <rect x="-42" y="-6" width="10" height="12" rx="2"/>
+      <rect x="32" y="-6" width="10" height="12" rx="2"/>
+      <rect x="22" y="-36" width="10" height="12" rx="2" transform="rotate(45 27 -30)"/>
+      <rect x="-32" y="-36" width="10" height="12" rx="2" transform="rotate(-45 -27 -30)"/>
+      <rect x="22" y="24" width="10" height="12" rx="2" transform="rotate(-45 27 30)"/>
+      <rect x="-32" y="24" width="10" height="12" rx="2" transform="rotate(45 -27 30)"/>
     </g>
+
+    <!-- Inner cutout -->
+    <circle r="22" fill="#0d9488"/>
+    <!-- Center dot -->
+    <circle r="8" fill="#fff"/>
+    <circle r="4" fill="#0d9488"/>
+  </g>
+
+  <!-- Spanner (wrench) -->
+  <g transform="translate(78,84) rotate(-40)">
+    <!-- Handle -->
+    <rect x="-4.5" y="-36" width="9" height="48" rx="3.5" fill="#fbbf24"/>
+    <!-- Head jaw -->
+    <path d="M-10-36c-2-4-1-10 5-12c6-2 11 1 12 5l2 8h-14z" fill="#fbbf24"/>
+    <!-- Head cutout -->
+    <path d="M-5-34c-1-2 0-6 3-7c3-1 6 1 6 4" fill="none" stroke="#d97706" stroke-width="1.2"/>
   </g>
 </svg>
