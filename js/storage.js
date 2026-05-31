@@ -120,7 +120,7 @@ var InventoryDB = {
     var self = this;
     return this._apiCall('GET', '?select=*')
       .then(function(data) {
-        self._data = data || [];
+        self._data = (data || []).map(function(r) { return self._camelizeKeys(r); });
         return self._data;
       })
       .catch(function(e) {
@@ -145,7 +145,7 @@ var InventoryDB = {
       opts.headers['Prefer'] = 'return=minimal';
     }
     if (body && (method === 'POST' || method === 'PATCH')) {
-      opts.body = JSON.stringify(body);
+      opts.body = JSON.stringify(this._lowerKeys(body));
     }
     return fetch(url, opts).then(function(res) {
       if (!res.ok) {
@@ -165,6 +165,38 @@ var InventoryDB = {
   _today: function() {
     var d = new Date();
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  },
+
+  _lowerKeys: function(obj) {
+    var out = {};
+    var keys = Object.keys(obj);
+    for (var i = 0; i < keys.length; i++) {
+      out[keys[i].toLowerCase()] = obj[keys[i]];
+    }
+    return out;
+  },
+
+  _camelizeKeys: function(obj) {
+    var camelMap = {
+      id: 'id',
+      partnumber: 'partNumber',
+      partname: 'partName',
+      model: 'model',
+      chassis: 'chassis',
+      quantity: 'quantity',
+      availabilitystatus: 'availabilityStatus',
+      typeofwork: 'typeOfWork',
+      workernumber: 'workerNumber',
+      received: 'received',
+      receiveddate: 'receivedDate',
+      createddate: 'createdDate'
+    };
+    var out = {};
+    var keys = Object.keys(obj);
+    for (var i = 0; i < keys.length; i++) {
+      out[camelMap[keys[i]] || keys[i]] = obj[keys[i]];
+    }
+    return out;
   },
 
   reload: function() {
