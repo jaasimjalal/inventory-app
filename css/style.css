@@ -1036,13 +1036,11 @@ tbody tr {
   color: var(--text);
 }
 
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-}
+  .header-left {
+    gap: 0.4rem;
+  }
 
-.brand-icon {
+  .brand-icon {
   width: 80px;
   height: 80px;
   display: block;
@@ -1066,10 +1064,23 @@ tbody tr {
 /* Mobile responsive */
 @media (max-width: 768px) {
   .app-header {
-    padding: 0.3rem 1rem;
+    padding: 0.2rem 0.75rem;
   }
 
-.app-header h1 {
+  .app-header h1 {
+    font-size: 0.9rem;
+  }
+
+  .brand-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .header-left {
+    gap: 0.4rem;
+  }
+
+  .app-header h1 {
     font-size: 1.05rem;
   }
 
