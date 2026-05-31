@@ -1096,12 +1096,11 @@ tbody tr {
   background: none;
   border: none;
   color: #64748b;
+  font-size: 1.1rem;
   line-height: 1;
-  padding: 0.15rem 0.2rem;
+  padding: 0.2rem 0.3rem;
   cursor: pointer;
   transition: color 0.15s;
-  display: flex;
-  align-items: center;
 }
 .btn-logout:hover {
   color: #334155;
