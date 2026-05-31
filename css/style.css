@@ -1121,27 +1121,99 @@ tbody tr {
     justify-self: auto;
   }
 
-  table {
-    font-size: 0.78rem;
+  .table-wrapper {
+    overflow: visible;
+    border: none;
+    background: transparent;
   }
 
-  thead th {
-    padding: 0.5rem 0.55rem;
-    font-size: 0.68rem;
+  .table-section.card {
+    border-left: 4px solid #0f766e;
+  }
+
+  table, thead, tbody, tr, th, td {
+    display: block;
+  }
+
+  thead {
+    display: none;
+  }
+
+  table {
+    font-size: 0.82rem;
+  }
+
+  tbody tr {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-left: 3px solid #0d9488;
+    border-radius: 8px;
+    margin-bottom: 0.65rem;
+    padding: 0.6rem 0.75rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+
+  tbody tr:nth-child(even) {
+    background: #fff;
+  }
+
+  tbody tr:hover {
+    background: #fff;
   }
 
   tbody td {
-    padding: 0.45rem 0.55rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    padding: 0.3rem 0;
+    border-bottom: none;
+    font-size: 0.82rem;
   }
 
-  thead th:not(:last-child)::after {
-    display: none;
+  tbody td::before {
+    content: attr(data-label);
+    min-width: 85px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+  }
+
+  tbody td:last-child {
+    padding-bottom: 0;
+  }
+
+  td.toggle-col {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    width: auto;
+    text-align: left;
+  }
+
+  td.actions-col {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    width: auto;
+    text-align: left;
+    justify-content: flex-start;
+  }
+
+  td.date-col {
+    white-space: normal;
+  }
+
+  td.status-badge {
+    display: inline-flex;
   }
 
   .actions-col {
     display: flex;
     gap: 0.15rem;
-    justify-content: center;
+    justify-content: flex-start;
   }
 
   .notification {

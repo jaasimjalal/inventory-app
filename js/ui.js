@@ -155,21 +155,21 @@ const UI = {
     for (let i = 0; i < pageRecords.length; i++) {
       const r = pageRecords[i];
       html += `<tr>
-        <td>${this._esc(r.partNumber)}</td>
-        <td>${this._esc(r.partName)}</td>
-        <td>${this._esc(r.model)}</td>
-        <td>${r.quantity}</td>
-        <td>${this._esc(r.chassis)}</td>
-        <td>${this._esc(r.typeOfWork)}</td>
-        <td>${r.typeOfWork === 'Worker' ? this._esc(r.workerNumber) : '-'}</td>
-        <td>${r.availabilityStatus ? `<span class="status-badge ${r.availabilityStatus === 'Inside KSA' ? 'status-inside' : 'status-outside'}">${this._esc(r.availabilityStatus)}</span>` : ''}</td>
-        <td class="date-col">${r.createdDate}</td>
-        <td class="toggle-col">
+        <td data-label="Part Number">${this._esc(r.partNumber)}</td>
+        <td data-label="Part Name">${this._esc(r.partName)}</td>
+        <td data-label="Model">${this._esc(r.model)}</td>
+        <td data-label="Qty">${r.quantity}</td>
+        <td data-label="Chassis">${this._esc(r.chassis)}</td>
+        <td data-label="Work">${this._esc(r.typeOfWork)}</td>
+        <td data-label="Worker No">${r.typeOfWork === 'Worker' ? this._esc(r.workerNumber) : '-'}</td>
+        <td data-label="Status">${r.availabilityStatus ? `<span class="status-badge ${r.availabilityStatus === 'Inside KSA' ? 'status-inside' : 'status-outside'}">${this._esc(r.availabilityStatus)}</span>` : ''}</td>
+        <td class="date-col" data-label="Created">${r.createdDate}</td>
+        <td class="toggle-col" data-label="Received">
           <button class="toggle-switch received-toggle-btn ${r.received ? 'toggle-on' : ''}" data-id="${r.id}" data-received="${r.received}" title="${r.received ? 'Mark as not received' : 'Mark as received'}">
             <span class="toggle-slider"></span>
           </button>
         </td>
-        <td class="actions-col">
+        <td class="actions-col" data-label="">
           <button class="btn btn-small btn-edit" data-id="${r.id}" title="Edit">&#9998;</button>
           <button class="btn btn-small btn-delete" data-id="${r.id}" title="Delete">&#128465;</button>
         </td>
