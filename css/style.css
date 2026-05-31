@@ -1155,14 +1155,50 @@ tbody tr {
 
   .table-controls {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 0.4rem;
+    justify-content: space-between;
+    gap: 0.3rem;
   }
 
-  .table-controls #exportExcelBtn {
+  .table-controls-left {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .table-controls .pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .table-controls #recordCount {
+    font-size: 0.65rem;
+    padding: 0.05rem 0.35rem;
+  }
+
+  .table-controls .pill-btn {
+    font-size: 0.65rem;
+    padding: 0.05rem 0.35rem;
+  }
+
+  .table-controls .pagination-controls .btn {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.35rem;
+  }
+
+  .table-controls .pagination-controls #pageInfo {
+    font-size: 0.65rem;
+  }
+
+  .table-controls #exportExcelBtn,
+  .table-controls #refreshBtn {
     margin: 0;
     justify-self: auto;
+    font-size: 0.65rem;
+    padding: 0.15rem 0.35rem;
   }
 
   .table-wrapper {
