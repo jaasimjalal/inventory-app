@@ -775,6 +775,29 @@ tbody tr {
   transform: scale(1.1);
 }
 
+.action-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.15rem;
+  line-height: 1;
+}
+.action-pill .btn-edit,
+.action-pill .btn-delete {
+  padding: 0;
+  background: transparent;
+  border: none;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+.edit-pill {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+}
+.delete-pill {
+  background: color-mix(in srgb, var(--danger) 15%, transparent);
+}
+
 .status-badge {
   display: inline-block;
   font-size: 0.72rem;

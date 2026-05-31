@@ -207,8 +207,8 @@ const UI = {
           </button>
         </td>
         <td class="actions-col" data-label="">
-          <button class="btn btn-small btn-edit" data-id="${r.id}" title="Edit">&#9998;</button>
-          <button class="btn btn-small btn-delete" data-id="${r.id}" title="Delete">&#128465;</button>
+          <span class="action-pill edit-pill"><button class="btn btn-small btn-edit" data-id="${r.id}" title="Edit">&#9998;</button></span>
+          <span class="action-pill delete-pill"><button class="btn btn-small btn-delete" data-id="${r.id}" title="Delete">&#128465;</button></span>
         </td>
       </tr>`;
     }
