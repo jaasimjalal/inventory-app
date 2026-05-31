@@ -196,7 +196,7 @@ const App = {
       errorEl.textContent = '';
       InventoryDB.update(id, { received: true, receivedDate: dateVal });
       UI.hideReceivedDialog();
-      UI.showNotification('Marked as received.', 'success');
+      UI.showNotification('Marked as received. Switch filter to "Received" to view.', 'success');
     } else {
       InventoryDB.update(id, { received: false, receivedDate: '' });
       UI.hideReceivedDialog();
