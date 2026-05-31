@@ -106,6 +106,15 @@ const UI = {
       workerInput.value = '';
     }
     document.getElementById('availabilityStatus').value = record.availabilityStatus || '';
+    const provinceGroup = document.getElementById('provinceGroup');
+    const provinceInput = document.getElementById('province');
+    if (record.availabilityStatus === 'Inside KSA') {
+      provinceGroup.hidden = false;
+      provinceInput.value = record.province || '';
+    } else {
+      provinceGroup.hidden = true;
+      provinceInput.value = '';
+    }
 
     document.getElementById('formTitle').textContent = 'Edit Record';
     document.getElementById('editBadge').classList.remove('hidden');
@@ -127,6 +136,8 @@ const UI = {
 
     document.getElementById('typeOfWork').value = '';
     document.getElementById('availabilityStatus').value = '';
+    document.getElementById('provinceGroup').hidden = true;
+    document.getElementById('province').value = '';
 
     Validator.clearErrors();
   },
@@ -160,9 +171,10 @@ const UI = {
         <td data-label="Model">${this._esc(r.model)}</td>
         <td data-label="Qty">${r.quantity}</td>
         <td data-label="Chassis">${this._esc(r.chassis)}</td>
+        <td data-label="Status">${r.availabilityStatus ? `<span class="status-badge ${r.availabilityStatus === 'Inside KSA' ? 'status-inside' : 'status-outside'}">${this._esc(r.availabilityStatus)}</span>` : ''}</td>
+        <td data-label="Province">${r.availabilityStatus === 'Inside KSA' ? this._esc(r.province) : '-'}</td>
         <td data-label="Work">${this._esc(r.typeOfWork)}</td>
         <td data-label="Worker No">${r.typeOfWork === 'Worker' ? this._esc(r.workerNumber) : '-'}</td>
-        <td data-label="Status">${r.availabilityStatus ? `<span class="status-badge ${r.availabilityStatus === 'Inside KSA' ? 'status-inside' : 'status-outside'}">${this._esc(r.availabilityStatus)}</span>` : ''}</td>
         <td class="date-col" data-label="Created">${r.createdDate}</td>
         <td class="toggle-col" data-label="Received">
           <button class="toggle-switch received-toggle-btn ${r.received ? 'toggle-on' : ''}" data-id="${r.id}" data-received="${r.received}" title="${r.received ? 'Mark as not received' : 'Mark as received'}">
@@ -265,6 +277,7 @@ const UI = {
     document.getElementById('recTypeOfWork').textContent = record.typeOfWork;
     document.getElementById('recWorkerNumber').textContent = record.typeOfWork === 'Worker' ? (record.workerNumber || '-') : '-';
     document.getElementById('recAvailability').textContent = record.availabilityStatus;
+    document.getElementById('recProvince').textContent = record.availabilityStatus === 'Inside KSA' ? (record.province || '-') : '-';
   },
 
   hideReceivedDialog() {

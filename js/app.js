@@ -101,6 +101,10 @@ const App = {
       }
     });
 
+    document.getElementById('availabilityStatus').addEventListener('change', () => {
+      App.toggleProvinceField();
+    });
+
     document.getElementById('exportExcelBtn').addEventListener('click', () => {
       this.exportExcel();
     });
@@ -159,8 +163,20 @@ const App = {
       chassis: document.getElementById('chassis').value.trim(),
       typeOfWork: document.getElementById('typeOfWork').value,
       workerNumber: document.getElementById('typeOfWork').value === 'Worker' ? document.getElementById('workerNumber').value.trim() : '',
-      availabilityStatus: document.getElementById('availabilityStatus').value
+      availabilityStatus: document.getElementById('availabilityStatus').value,
+      province: document.getElementById('province').value
     };
+  },
+
+  toggleProvinceField() {
+    const val = document.getElementById('availabilityStatus').value;
+    const group = document.getElementById('provinceGroup');
+    if (val === 'Inside KSA') {
+      group.hidden = false;
+    } else {
+      group.hidden = true;
+      document.getElementById('province').value = '';
+    }
   },
 
   handleEdit(id) {
@@ -268,16 +284,17 @@ const App = {
       return;
     }
 
-    const headers = ['Part Number', 'Part Name', 'Model', 'Quantity', 'Chassis', 'Type of Work', 'Worker Number', 'Availability Status', 'Received', 'Received Date', 'Created Date'];
+    const headers = ['Part Number', 'Part Name', 'Model', 'Quantity', 'Chassis', 'Availability Status', 'Province', 'Type of Work', 'Worker Number', 'Received', 'Received Date', 'Created Date'];
     const rows = records.map(r => [
       r.partNumber,
       r.partName,
       r.model,
       r.quantity,
       r.chassis,
+      r.availabilityStatus,
+      r.availabilityStatus === 'Inside KSA' ? (r.province || '') : '-',
       r.typeOfWork,
       r.typeOfWork === 'Worker' ? (r.workerNumber || '') : '-',
-      r.availabilityStatus,
       r.received ? 'Yes' : 'No',
       r.receivedDate || '-',
       r.createdDate

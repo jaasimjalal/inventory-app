@@ -41,6 +41,12 @@ const Validator = {
       }
     }
 
+    if (record.availabilityStatus === 'Inside KSA') {
+      if (!record.province) {
+        errors.push({ field: 'province', message: 'Province is required for Inside KSA.' });
+      }
+    }
+
     return {
       isValid: errors.length === 0,
       errors

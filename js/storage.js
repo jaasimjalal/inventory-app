@@ -185,6 +185,7 @@ var InventoryDB = {
       chassis: 'chassis',
       quantity: 'quantity',
       availabilitystatus: 'availabilityStatus',
+      province: 'province',
       typeofwork: 'typeOfWork',
       workernumber: 'workerNumber',
       received: 'received',
