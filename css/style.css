@@ -788,14 +788,23 @@ tbody tr {
   padding: 0;
   background: transparent;
   border: none;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   line-height: 1;
+  font-weight: 600;
+}
+.edit-pill .btn-edit {
+  color: var(--accent);
+}
+.delete-pill .btn-delete {
+  color: var(--danger);
 }
 .edit-pill {
-  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  background: #fff;
+  border: 1px solid var(--accent);
 }
 .delete-pill {
-  background: color-mix(in srgb, var(--danger) 15%, transparent);
+  background: #fff;
+  border: 1px solid var(--danger);
 }
 
 .status-badge {
