@@ -1167,7 +1167,10 @@ tbody tr {
     gap: 0.25rem;
   }
 
-  .table-controls #refreshBtn {
+  .table-controls .table-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
     margin-left: auto;
   }
 
