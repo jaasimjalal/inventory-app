@@ -34,22 +34,22 @@ This creates the table and allows public read/write from your app.
 
 1. Go to left sidebar → **Project Settings** → **API**
 2. Copy the **Project URL** (looks like `https://xxx.supabase.co`)
-3. Copy the **anon public** key (starts with `eyJ...`)
+3. Copy the **anon public** key (starts with **`eyJ...`** — not `sb_publishable_...`)
 
 ## 3. Update index.html
 
-Open `index.html` and find these lines near the bottom:
+Open `index.html` and replace the config block near the bottom:
 
 ```html
 <script id="supabase-config" type="application/json">
   {
-    "url": "REPLACE_WITH_YOUR_SUPABASE_URL",
-    "key": "REPLACE_WITH_YOUR_SUPABASE_ANON_KEY"
+    "url": "https://wmyquirqggackykeulni.supabase.co",
+    "key": "PASTE_YOUR_ANON_KEY_HERE"
   }
 </script>
 ```
 
-Replace the placeholder values with your Supabase URL and anon key.
+The anon key starts with `eyJ` and is found at **Project Settings → API → anon public**.
 
 ## 4. Deploy to GitHub Pages
 
@@ -72,19 +72,3 @@ Replace the placeholder values with your Supabase URL and anon key.
 1. Open `https://YOUR_USERNAME.github.io/inventory-app/` in Chrome on Android
 2. You'll see an **Install** banner at the bottom, or tap the menu → **Add to Home screen**
 3. The app opens like a native app with teal icon
-
-## Files structure
-
-```
-index.html         — main app
-manifest.json      — PWA manifest
-sw.js              — service worker
-icon-192.png       — app icon
-icon-512.png       — high-res icon
-css/style.css      — styles
-js/storage.js      — Supabase + in-memory cache
-js/validation.js   — form validation
-js/ui.js           — DOM rendering
-js/app.js          — app orchestration
-SETUP.md           — this guide
-```
