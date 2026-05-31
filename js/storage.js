@@ -31,8 +31,36 @@ var InventoryDB = {
   add: function(record) {
     var self = this;
     this._data.push(record);
-    this._apiCall('POST', '', record).catch(function() {});
+    this._apiCall('POST', '', record).catch(function(e) {
+      self._showSyncError('Failed to save record to cloud');
+    });
     return record;
+  },
+
+  update: function(id, updatedFields) {
+    var self = this;
+    var index = this._data.findIndex(function(r) { return r.id === id; });
+    if (index === -1) return null;
+    var record = this._data[index];
+    var keys = Object.keys(updatedFields);
+    for (var i = 0; i < keys.length; i++) {
+      record[keys[i]] = updatedFields[keys[i]];
+    }
+    this._apiCall('PATCH', '?id=eq.' + encodeURIComponent(id), updatedFields).catch(function(e) {
+      self._showSyncError('Failed to update record in cloud');
+    });
+    return record;
+  },
+
+  delete: function(id) {
+    var self = this;
+    var index = this._data.findIndex(function(r) { return r.id === id; });
+    if (index === -1) return false;
+    this._data.splice(index, 1);
+    this._apiCall('DELETE', '?id=eq.' + encodeURIComponent(id)).catch(function(e) {
+      self._showSyncError('Failed to delete record from cloud');
+    });
+    return true;
   },
 
   update: function(id, updatedFields) {
@@ -144,6 +172,16 @@ var InventoryDB = {
   _today: function() {
     var d = new Date();
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  },
+
+  reload: function() {
+    return this._fetchAll();
+  },
+
+  _showSyncError: function(msg) {
+    if (typeof UI !== 'undefined' && UI.showNotification) {
+      UI.showNotification(msg, 'error');
+    }
   }
 
 };

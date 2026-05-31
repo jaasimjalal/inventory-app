@@ -105,6 +105,10 @@ const App = {
       this.exportExcel();
     });
 
+    document.getElementById('refreshBtn').addEventListener('click', () => {
+      this.refreshFromCloud();
+    });
+
     document.getElementById('receivedConfirmBtn').addEventListener('click', () => {
       this.handleReceivedConfirm();
     });
@@ -245,6 +249,16 @@ const App = {
     document.getElementById('actionRequiredBtn').classList.toggle('active', this.actionRequiredFilter);
 
     UI.renderTable(records);
+  },
+
+  refreshFromCloud() {
+    var self = this;
+    InventoryDB.reload().then(function() {
+      UI.showNotification('Data synced from cloud.', 'success');
+      self.refresh();
+    }).catch(function() {
+      UI.showNotification('Failed to sync from cloud.', 'error');
+    });
   },
 
   exportExcel() {
