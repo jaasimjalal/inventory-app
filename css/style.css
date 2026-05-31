@@ -1180,6 +1180,7 @@ tbody tr {
     gap: 0.2rem;
     width: 100%;
     justify-content: center;
+    order: 1;
   }
 
   .table-controls #recordCount {
