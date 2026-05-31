@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Inventory Management</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      background: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 1rem;
+    }
+    .login-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      border: 1px solid #e2e8f0;
+      text-align: center;
+    }
+    .login-logo {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 0.75rem;
+    }
+    .login-card h1 {
+      font-size: 1.2rem;
+      color: #0f172a;
+      margin: 0 0 0.25rem 0;
+    }
+    .login-card p {
+      font-size: 0.82rem;
+      color: #64748b;
+      margin: 0 0 1.5rem 0;
+    }
+    .login-card .form-group {
+      text-align: left;
+      margin-bottom: 1rem;
+    }
+    .login-card label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 0.3rem;
+    }
+    .login-card input {
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      box-sizing: border-box;
+      transition: border-color 0.15s;
+    }
+    .login-card input:focus {
+      outline: none;
+      border-color: #0d9488;
+      box-shadow: 0 0 0 3px rgba(13,148,136,0.12);
+    }
+    .login-card .btn {
+      width: 100%;
+      padding: 0.7rem;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    .login-error {
+      color: #dc2626;
+      font-size: 0.78rem;
+      margin-top: 0.5rem;
+      display: none;
+    }
+    .login-error.visible {
+      display: block;
+    }
+    .login-card .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <img src="assets/logo.png" alt="" class="login-logo">
+    <h1>Inventory Management</h1>
+    <p>Sign in to your account</p>
+    <form id="loginForm" autocomplete="off">
+      <div class="form-group">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" placeholder="you@example.com" required autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password">
+      </div>
+      <div id="loginError" class="login-error">Invalid credentials. Please try again.</div>
+      <button type="submit" id="loginBtn" class="btn btn-primary">Sign In</button>
+    </form>
+    <p style="margin-top:1.5rem;font-size:0.72rem;color:#94a3b8;">Use credentials created in Supabase Auth</p>
+  </div>
+
+  <script id="supabase-config" type="application/json">
+    {
+      "url": "https://wmyquirqggackykeulni.supabase.co",
+      "key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndteXF1aXJxZ2dhY2t5a2V1bG5pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxOTkwMDgsImV4cCI6MjA5NTc3NTAwOH0.KK_KauJ6ZBlOFPekyTMHkaU8G8kkJaFqrYDyTf7W5Gw"
+    }
+  </script>
+  <script>
+    (function() {
+      var config = JSON.parse(document.getElementById('supabase-config').textContent);
+      var SUPABASE_URL = config.url;
+      var SUPABASE_KEY = config.key;
+
+      var form = document.getElementById('loginForm');
+      var emailInput = document.getElementById('loginEmail');
+      var passwordInput = document.getElementById('loginPassword');
+      var loginBtn = document.getElementById('loginBtn');
+      var errorEl = document.getElementById('loginError');
+
+      if (localStorage.getItem('sb_session')) {
+        window.location.replace('index.html');
+        return;
+      }
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        errorEl.classList.remove('visible');
+        loginBtn.disabled = true;
+        loginBtn.textContent = 'Signing in...';
+
+        var email = emailInput.value.trim();
+        var password = passwordInput.value;
+
+        fetch(SUPABASE_URL + '/auth/v1/token?grant_type=password', {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email: email, password: password })
+        })
+        .then(function(res) {
+          if (!res.ok) {
+            return res.json().then(function(err) { throw new Error(err.error_description || err.error || 'Invalid credentials'); });
+          }
+          return res.json();
+        })
+        .then(function(data) {
+          localStorage.setItem('sb_session', JSON.stringify({
+            access_token: data.access_token,
+            refresh_token: data.refresh_token,
+            expires_at: data.expires_at,
+            email: data.user ? data.user.email : email
+          }));
+          window.location.replace('index.html');
+        })
+        .catch(function(err) {
+          errorEl.textContent = err.message || 'Invalid credentials. Please try again.';
+          errorEl.classList.add('visible');
+          loginBtn.disabled = false;
+          loginBtn.textContent = 'Sign In';
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
