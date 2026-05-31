@@ -170,10 +170,11 @@ body {
   margin-bottom: 0.45rem;
 }
 
-.info-note-title .info-icon {
-  font-size: 0.95rem;
+.info-note-title .info-note-logo {
+  width: 18px;
+  height: 18px;
   vertical-align: middle;
-  margin-right: 0.15rem;
+  margin-right: 0.25rem;
 }
 
 .info-note-item {
