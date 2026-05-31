@@ -1152,6 +1152,7 @@ tbody tr {
     margin-bottom: 0.65rem;
     padding: 0.6rem 0.75rem;
     box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    overflow: hidden;
   }
 
   tbody tr:nth-child(even) {
@@ -1164,22 +1165,28 @@ tbody tr {
 
   tbody td {
     display: flex;
-    align-items: baseline;
+    align-items: flex-start;
     gap: 0.4rem;
     padding: 0.3rem 0;
     border-bottom: none;
     font-size: 0.82rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   tbody td::before {
     content: attr(data-label);
-    min-width: 85px;
+    flex: 0 0 70px;
     font-weight: 600;
     color: var(--text-secondary);
     font-size: 0.72rem;
     text-transform: uppercase;
     letter-spacing: 0.03em;
-    flex-shrink: 0;
+  }
+
+  tbody td > span,
+  tbody td > button {
+    max-width: 100%;
   }
 
   tbody td:last-child {
