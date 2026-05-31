@@ -1094,20 +1094,17 @@ tbody tr {
 
 .btn-logout {
   background: none;
-  border: 1px solid var(--danger);
-  color: var(--danger);
-  font-size: 0.72rem;
-  font-weight: 600;
-  padding: 0.2rem 0.5rem;
-  border-radius: 6px;
+  border: none;
+  color: #64748b;
+  font-size: 1.3rem;
+  line-height: 1;
+  padding: 0.15rem 0.3rem;
   cursor: pointer;
-  transition: background 0.15s;
-  white-space: nowrap;
+  transition: color 0.15s;
   font-family: inherit;
-  line-height: 1.5;
 }
 .btn-logout:hover {
-  background: #fef2f2;
+  color: #334155;
 }
 
 /* Mobile responsive */
