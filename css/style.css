@@ -567,8 +567,7 @@ body {
 }
 
 .table-controls {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.75rem;
@@ -577,7 +576,6 @@ body {
 }
 
 .table-controls #recordCount {
-  justify-self: start;
   background: #fff;
   color: #0d9488;
   border: 1px solid #0d9488;
@@ -627,7 +625,7 @@ body {
 }
 
 .table-controls .table-actions {
-  justify-self: end;
+  margin-right: auto;
 }
 
 .pagination-controls {
@@ -1172,6 +1170,7 @@ tbody tr {
     align-items: center;
     gap: 0.25rem;
     margin-left: auto;
+    margin-right: 0;
   }
 
   .table-controls .pagination-controls {
