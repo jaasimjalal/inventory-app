@@ -30,6 +30,29 @@ GRANT ALL ON records TO anon;
 
 This creates the table and allows public read/write from your app.
 
+## 1b. Create users table for login
+
+In **SQL Editor**, run:
+
+```sql
+CREATE TABLE IF NOT EXISTS users (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  username text NOT NULL UNIQUE,
+  password text NOT NULL,
+  created_at timestamptz DEFAULT now()
+);
+
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "anon_select_users" ON users FOR SELECT USING (true);
+GRANT SELECT ON users TO anon;
+```
+
+Then insert a test user:
+
+```sql
+INSERT INTO users (username, password) VALUES ('admin', 'admin123');
+```
+
 ## 2. Get API keys
 
 1. Go to left sidebar → **Project Settings** → **API**
