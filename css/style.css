@@ -1081,6 +1081,10 @@ tbody tr {
     grid-template-columns: 1fr;
   }
 
+  .layout-left .form-section.card {
+    padding: 0.85rem;
+  }
+
   .form-grid,
   .layout-left .form-grid {
     grid-template-columns: 1fr;
@@ -1130,6 +1134,13 @@ tbody tr {
 
   .table-section.card {
     border-left: 4px solid #0f766e;
+  }
+
+  .form-section.card,
+  .table-section.card,
+  .info-note.card {
+    width: 100%;
+    max-width: 100%;
   }
 
   table, thead, tbody, tr, th, td {
