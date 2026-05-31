@@ -1158,7 +1158,7 @@ tbody tr {
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: 0.15rem;
     overflow: hidden;
   }
