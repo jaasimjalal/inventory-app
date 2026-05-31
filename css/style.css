@@ -626,7 +626,7 @@ body {
   color: #fff;
 }
 
-.table-controls #exportExcelBtn {
+.table-controls .table-actions {
   justify-self: end;
 }
 
