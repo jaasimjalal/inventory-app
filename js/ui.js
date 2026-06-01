@@ -20,11 +20,9 @@ const UI = {
       if (typeSelect.value === 'Worker') {
         workerGroup.hidden = false;
         workerGroup.style.display = 'flex';
-        workerInput.required = true;
       } else {
         workerGroup.hidden = true;
         workerGroup.style.display = 'none';
-        workerInput.required = false;
         workerInput.value = '';
       }
     };
@@ -117,12 +115,10 @@ const UI = {
     if (record.typeOfWork === 'Worker') {
       workerGroup.hidden = false;
       workerGroup.style.display = 'flex';
-      workerInput.required = true;
       workerInput.value = record.workerNumber || '';
     } else {
       workerGroup.hidden = true;
       workerGroup.style.display = 'none';
-      workerInput.required = false;
       workerInput.value = '';
     }
     document.getElementById('availabilityStatus').value = record.availabilityStatus || '';
@@ -153,7 +149,6 @@ const UI = {
     const wg = document.getElementById('workerNumberGroup');
     wg.hidden = true;
     wg.style.display = 'none';
-    document.getElementById('workerNumber').required = false;
 
     document.getElementById('formTitle').textContent = 'Register Part';
     document.getElementById('editBadge').classList.add('hidden');

@@ -2,9 +2,7 @@ const Validator = {
   validate(record, existingRecords, editId) {
     const errors = [];
 
-    if (!record.partNumber || !record.partNumber.trim()) {
-      errors.push({ field: 'partNumber', message: 'Part Number is required.' });
-    } else {
+    if (record.partNumber && record.partNumber.trim()) {
       const dup = existingRecords.find(
         r => r.partNumber.toLowerCase() === record.partNumber.trim().toLowerCase() && r.id !== editId
       );
@@ -33,12 +31,6 @@ const Validator = {
 
     if (!record.typeOfWork) {
       errors.push({ field: 'typeOfWork', message: 'Type of Work is required.' });
-    }
-
-    if (record.typeOfWork === 'Worker') {
-      if (!record.workerNumber || !record.workerNumber.toString().trim()) {
-        errors.push({ field: 'workerNumber', message: 'Worker Number is required when Type of Work is Worker.' });
-      }
     }
 
     if (record.availabilityStatus === 'Inside KSA') {
