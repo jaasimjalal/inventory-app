@@ -124,12 +124,24 @@ const UI = {
     document.getElementById('availabilityStatus').value = record.availabilityStatus || '';
     const provinceGroup = document.getElementById('provinceGroup');
     const provinceInput = document.getElementById('province');
+    const provinceCustom = document.getElementById('provinceCustom');
     if (record.availabilityStatus === 'Inside KSA') {
       provinceGroup.hidden = false;
-      provinceInput.value = record.province || '';
+      var predefined = ['Riyadh','Dammam','Jeddah','Jubail','Tabuk'];
+      if (record.province && predefined.indexOf(record.province) === -1) {
+        provinceInput.value = 'Other';
+        provinceCustom.hidden = false;
+        provinceCustom.value = record.province;
+      } else {
+        provinceInput.value = record.province || '';
+        provinceCustom.hidden = true;
+        provinceCustom.value = '';
+      }
     } else {
       provinceGroup.hidden = true;
       provinceInput.value = '';
+      provinceCustom.hidden = true;
+      provinceCustom.value = '';
     }
 
     document.getElementById('formTitle').textContent = 'Edit Record';
@@ -158,6 +170,8 @@ const UI = {
     document.getElementById('availabilityStatus').value = '';
     document.getElementById('provinceGroup').hidden = true;
     document.getElementById('province').value = '';
+    document.getElementById('provinceCustom').value = '';
+    document.getElementById('provinceCustom').hidden = true;
 
     Validator.clearErrors();
   },

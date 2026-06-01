@@ -105,6 +105,10 @@ const App = {
       App.toggleProvinceField();
     });
 
+    document.getElementById('province').addEventListener('change', () => {
+      App.toggleProvinceCustom();
+    });
+
     document.getElementById('exportExcelBtn').addEventListener('click', () => {
       this.exportExcel();
     });
@@ -164,7 +168,7 @@ const App = {
       typeOfWork: document.getElementById('typeOfWork').value,
       workerNumber: document.getElementById('typeOfWork').value === 'Worker' ? document.getElementById('workerNumber').value.trim() : '',
       availabilityStatus: document.getElementById('availabilityStatus').value,
-      province: document.getElementById('province').value
+      province: document.getElementById('province').value === 'Other' ? document.getElementById('provinceCustom').value.trim() : document.getElementById('province').value
     };
   },
 
@@ -176,6 +180,15 @@ const App = {
     } else {
       group.hidden = true;
       document.getElementById('province').value = '';
+      document.getElementById('provinceCustom').value = '';
+      document.getElementById('provinceCustom').hidden = true;
+    }
+  },
+
+  toggleProvinceCustom() {
+    document.getElementById('provinceCustom').hidden = document.getElementById('province').value !== 'Other';
+    if (document.getElementById('province').value !== 'Other') {
+      document.getElementById('provinceCustom').value = '';
     }
   },
 

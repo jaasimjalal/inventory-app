@@ -556,6 +556,10 @@ body {
   padding: 0 1.25rem;
 }
 
+#provinceCustom {
+  margin-top: 0.35rem;
+}
+
 .table-section .table-wrapper {
   margin-top: 0.75rem;
   border-radius: 0;
