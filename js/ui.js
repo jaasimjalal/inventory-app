@@ -356,7 +356,17 @@ const UI = {
     document.getElementById('recQuantity').textContent = record.quantity;
     document.getElementById('recChassis').textContent = record.chassis;
     document.getElementById('recTypeOfWork').textContent = record.typeOfWork;
-    document.getElementById('recWorkerNumber').textContent = record.typeOfWork === 'Counter Sale' ? (record.counterSaleNumber || '-') : record.typeOfWork === 'Work Order' ? (record.workOrderNumber || '-') : '-';
+    var refLabel = document.getElementById('recRefLabel');
+    if (record.typeOfWork === 'Counter Sale') {
+      refLabel.textContent = 'Counter Sale #:';
+      document.getElementById('recWorkerNumber').textContent = record.counterSaleNumber || '-';
+    } else if (record.typeOfWork === 'Work Order') {
+      refLabel.textContent = 'Work Order #:';
+      document.getElementById('recWorkerNumber').textContent = record.workOrderNumber || '-';
+    } else {
+      refLabel.textContent = 'Ref #:';
+      document.getElementById('recWorkerNumber').textContent = '-';
+    }
     document.getElementById('recAvailability').textContent = record.availabilityStatus;
     document.getElementById('recProvince').textContent = record.availabilityStatus === 'Inside KSA' ? (record.province || '-') : '-';
   },
