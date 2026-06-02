@@ -1310,6 +1310,10 @@ tbody tr {
     grid-template-columns: 1fr;
   }
 
+  .master-grid {
+    grid-template-columns: 1fr;
+  }
+
   .layout-left   .form-section.card {
     padding: 0.85rem;
   }
