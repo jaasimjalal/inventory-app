@@ -314,21 +314,23 @@ const App = {
 
     Validator.clearErrors();
 
+    var self = this;
     if (editId) {
-      const result = InventoryDB.update(editId, record);
-      if (result) {
+      InventoryDB.update(editId, record).then(function(ok) {
         UI.showNotification('Record updated successfully.', 'success');
-      }
+        UI.clearForm();
+        if (ok) { self.refreshFromCloud(); } else { self.refresh(); }
+      });
     } else {
       record.id = InventoryDB.generateId();
       record.createdDate = this.getCurrentDateTime();
       record.received = false;
-      InventoryDB.add(record);
-      UI.showNotification('Record added successfully.', 'success');
+      InventoryDB.add(record).then(function(ok) {
+        UI.showNotification('Record added successfully.', 'success');
+        UI.clearForm();
+        if (ok) { self.refreshFromCloud(); } else { self.refresh(); }
+      });
     }
-
-    UI.clearForm();
-    this.refresh();
   },
 
   gatherFormData() {
@@ -389,6 +391,7 @@ const App = {
 
     const isReceiveFlow = !document.getElementById('receivedModalBody').classList.contains('hidden');
 
+    var self = this;
     if (isReceiveFlow) {
       const dateInput = document.getElementById('receivedDateInput');
       const dateVal = dateInput.value;
@@ -398,26 +401,31 @@ const App = {
         return;
       }
       errorEl.textContent = '';
-      InventoryDB.update(id, { received: true, receivedDate: dateVal });
-      UI.hideReceivedDialog();
-      UI.showNotification('Marked as received. Switch filter to "Received" to view.', 'success');
+      InventoryDB.update(id, { received: true, receivedDate: dateVal }).then(function(ok) {
+        UI.hideReceivedDialog();
+        UI.showNotification('Marked as received. Switch filter to "Received" to view.', 'success');
+        if (ok) { self.refreshFromCloud(); } else { self.refresh(); }
+      });
     } else {
-      InventoryDB.update(id, { received: false, receivedDate: '' });
-      UI.hideReceivedDialog();
-      UI.showNotification('Marked as not received.', 'success');
+      InventoryDB.update(id, { received: false, receivedDate: '' }).then(function(ok) {
+        UI.hideReceivedDialog();
+        UI.showNotification('Marked as not received.', 'success');
+        if (ok) { self.refreshFromCloud(); } else { self.refresh(); }
+      });
     }
-    this.refresh();
   },
 
   handleDelete(id) {
     const record = InventoryDB.getById(id);
     if (!record) return;
+    var self = this;
     UI.showConfirmDialog(
       `Delete record "${record.partNumber} - ${record.partName}"?`,
       () => {
-        InventoryDB.delete(id);
-        UI.showNotification('Record deleted.', 'success');
-        this.refresh();
+        InventoryDB.delete(id).then(function(ok) {
+          UI.showNotification('Record deleted.', 'success');
+          if (ok) { self.refreshFromCloud(); } else { self.refresh(); }
+        });
       }
     );
   },

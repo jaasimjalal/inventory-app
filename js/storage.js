@@ -214,39 +214,45 @@ var InventoryDB = {
   add: function(record) {
     var self = this;
     this._data.push(record);
-    this._apiCall('POST', '', record).catch(function(e) {
+    return this._apiCall('POST', '', record).then(function() {
+      return true;
+    }).catch(function(e) {
       console.error('Supabase POST error:', e.message);
       self._showSyncError('Failed to save record to cloud');
+      return false;
     });
-    return record;
   },
 
   update: function(id, updatedFields) {
     var self = this;
     var index = this._data.findIndex(function(r) { return r.id === id; });
-    if (index === -1) return null;
+    if (index === -1) return Promise.resolve(false);
     var record = this._data[index];
     var keys = Object.keys(updatedFields);
     for (var i = 0; i < keys.length; i++) {
       record[keys[i]] = updatedFields[keys[i]];
     }
-    this._apiCall('PATCH', '?id=eq.' + encodeURIComponent(id), updatedFields).catch(function(e) {
+    return this._apiCall('PATCH', '?id=eq.' + encodeURIComponent(id), updatedFields).then(function() {
+      return true;
+    }).catch(function(e) {
       console.error('Supabase PATCH error:', e.message);
       self._showSyncError('Failed to update record in cloud');
+      return false;
     });
-    return record;
   },
 
   delete: function(id) {
     var self = this;
     var index = this._data.findIndex(function(r) { return r.id === id; });
-    if (index === -1) return false;
+    if (index === -1) return Promise.resolve(false);
     this._data.splice(index, 1);
-    this._apiCall('DELETE', '?id=eq.' + encodeURIComponent(id)).catch(function(e) {
+    return this._apiCall('DELETE', '?id=eq.' + encodeURIComponent(id)).then(function() {
+      return true;
+    }).catch(function(e) {
       console.error('Supabase DELETE error:', e.message);
       self._showSyncError('Failed to delete record from cloud');
+      return false;
     });
-    return true;
   },
 
   search: function(query, filters) {
