@@ -371,7 +371,6 @@ var InventoryDB = {
       availabilitystatus: 'availabilityStatus',
       province: 'province',
       typeofwork: 'typeOfWork',
-      workernumber: 'workerNumber',
       countersalenumber: 'counterSaleNumber',
       workordernumber: 'workOrderNumber',
       received: 'received',
