@@ -224,7 +224,7 @@ const App = {
       var cancelId = type === 'model' ? 'cancelModelEditBtn' : 'cancelProvinceEditBtn';
       document.getElementById(inputId).value = item.name;
       document.getElementById(btnId).textContent = 'Update';
-      document.getElementById(cancelId).hidden = false;
+      document.getElementById(cancelId).style.visibility = 'visible';
       this._editingMaster = { type: type, id: id };
     }
 
@@ -296,7 +296,7 @@ const App = {
     var cancelId = type === 'model' ? 'cancelModelEditBtn' : 'cancelProvinceEditBtn';
     document.getElementById(inputId).value = '';
     document.getElementById(btnId).textContent = 'Add';
-    document.getElementById(cancelId).hidden = true;
+    document.getElementById(cancelId).style.visibility = 'hidden';
     this._editingMaster = null;
   },
 
