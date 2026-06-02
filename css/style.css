@@ -1181,7 +1181,7 @@ tbody tr {
 
 .master-section .section-title {
   font-size: 0.95rem;
-  margin-bottom: 0.75rem;
+  margin: 0;
 }
 
 .master-form {
@@ -1233,6 +1233,31 @@ tbody tr {
 }
 
 
+
+.master-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.master-header .section-title {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.master-header .master-search-bar {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+.master-header .master-search-bar input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.82rem;
+}
 
 .master-empty {
   text-align: center;
@@ -1364,6 +1389,14 @@ tbody tr {
 
   .form-section.card[data-collapsed] .section-title::after {
     transform: rotate(-90deg);
+  }
+
+  .master-section .section-title {
+    cursor: default;
+  }
+
+  .master-section .section-title::after {
+    content: none;
   }
 
   .form-section.card[data-collapsed] #recordForm {
