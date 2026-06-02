@@ -359,11 +359,11 @@ const UI = {
     var refLabel = document.getElementById('recRefLabel');
     var refRow = document.getElementById('recRefRow');
     if (record.typeOfWork === 'Counter Sale') {
-      refLabel.textContent = 'Counter Sale #:';
+      refLabel.textContent = 'Counter Sale #';
       document.getElementById('recWorkerNumber').textContent = record.counterSaleNumber || '-';
       refRow.hidden = false;
     } else if (record.typeOfWork === 'Work Order') {
-      refLabel.textContent = 'Work Order #:';
+      refLabel.textContent = 'Work Order #';
       document.getElementById('recWorkerNumber').textContent = record.workOrderNumber || '-';
       refRow.hidden = false;
     } else {
