@@ -981,6 +981,16 @@ tbody tr {
   overflow-wrap: break-word;
 }
 
+.action-required-tr {
+  border-left: 4px solid #dc2626 !important;
+}
+
+@media (max-width: 768px) {
+  tbody tr.action-required-tr {
+    border-left: 3px solid #dc2626 !important;
+  }
+}
+
 .received-date-group {
   display: flex;
   flex-direction: column;

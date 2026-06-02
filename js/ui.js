@@ -246,7 +246,7 @@ const UI = {
     let html = '';
     for (let i = 0; i < pageRecords.length; i++) {
       const r = pageRecords[i];
-      html += `<tr>
+      html += `<tr class="${this.isActionRequired(r) ? 'action-required-tr' : ''}">
         <td data-label="Part Number">${this._esc(r.partNumber)}</td>
         <td data-label="Part Name">${this._esc(r.partName)}</td>
         <td data-label="Model">${this._esc(r.model)}</td>
@@ -285,7 +285,9 @@ const UI = {
     document.getElementById('nextPageBtn').disabled = this.currentPage >= totalPages;
   },
 
-  getPaginatedRecords(records) {
+  isActionRequired(r) {
+    return !r.partNumber || !r.availabilityStatus || !r.received;
+  },
     return records;
   },
 

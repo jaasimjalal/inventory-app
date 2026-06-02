@@ -111,6 +111,9 @@ const App = {
 
     document.getElementById('actionRequiredBtn').addEventListener('click', () => {
       this.actionRequiredFilter = !this.actionRequiredFilter;
+      if (this.actionRequiredFilter) {
+        document.getElementById('filterReceived').value = 'all';
+      }
       UI.currentPage = 1;
       this.refresh();
     });
