@@ -1596,6 +1596,11 @@ tbody tr {
     letter-spacing: 0.03em;
   }
 
+  tbody td[data-label=""]::before {
+    content: none;
+    flex: initial;
+  }
+
   tbody td > span,
   tbody td > button {
     max-width: 100%;

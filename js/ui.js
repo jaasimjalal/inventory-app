@@ -255,7 +255,7 @@ const UI = {
         <td data-label="Status">${r.availabilityStatus ? `<span class="status-badge ${r.availabilityStatus === 'Inside KSA' ? 'status-inside' : 'status-outside'}">${this._esc(r.availabilityStatus)}</span>` : ''}</td>
         <td data-label="Province">${r.availabilityStatus === 'Inside KSA' ? this._esc(r.province) : '-'}</td>
         <td data-label="Type of Work">${this._esc(r.typeOfWork)}</td>
-        <td data-label="Ref #">${r.typeOfWork === 'Counter Sale' ? this._esc(r.counterSaleNumber) : r.typeOfWork === 'Work Order' ? this._esc(r.workOrderNumber) : '-'}</td>
+        <td data-label="${r.typeOfWork === 'Counter Sale' ? 'Counter Sale #' : r.typeOfWork === 'Work Order' ? 'Work Order #' : ''}">${r.typeOfWork === 'Counter Sale' ? this._esc(r.counterSaleNumber) : r.typeOfWork === 'Work Order' ? this._esc(r.workOrderNumber) : '-'}</td>
         <td class="date-col" data-label="Created">${r.createdDate}</td>
         <td class="toggle-col" data-label="Received">
           <button class="toggle-switch received-toggle-btn ${r.received ? 'toggle-on' : ''}" data-id="${r.id}" data-received="${r.received}" title="${r.received ? 'Mark as not received' : 'Mark as received'}">
