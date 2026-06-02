@@ -1601,7 +1601,7 @@ tbody tr {
     flex: initial;
   }
 
-  tbody td[data-label=""] {
+  tbody td[data-label=""]:not(.actions-col) {
     display: none;
   }
 
