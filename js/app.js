@@ -13,6 +13,7 @@ const App = {
       self.setupTabs();
       UI.populateModelDropdown();
       UI.populateProvinceDropdown();
+      UI.renderMasterTables();
       self.refresh();
     });
   },
@@ -133,6 +134,7 @@ const App = {
         this.classList.add('active');
         document.querySelectorAll('.tab-content').forEach(function(tc) { tc.classList.remove('active'); });
         document.getElementById('tab' + this.dataset.tab.charAt(0).toUpperCase() + this.dataset.tab.slice(1)).classList.add('active');
+        if (this.dataset.tab === 'master') UI.renderMasterTables();
       });
     });
   },
