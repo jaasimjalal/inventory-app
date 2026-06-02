@@ -12,6 +12,11 @@ const UI = {
     this.setupWorkTypeToggle();
     this.setupSortHandlers();
     this.setupMobileAccordion();
+    this._updateMasterPageSize();
+  },
+
+  _updateMasterPageSize() {
+    this.masterPageSize = window.innerWidth <= 768 ? 5 : 10;
   },
 
   setupWorkTypeToggle() {
