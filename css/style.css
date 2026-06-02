@@ -1601,6 +1601,10 @@ tbody tr {
     flex: initial;
   }
 
+  tbody td[data-label=""] {
+    display: none;
+  }
+
   tbody td > span,
   tbody td > button {
     max-width: 100%;
