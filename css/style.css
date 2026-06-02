@@ -1314,6 +1314,16 @@ tbody tr {
     grid-template-columns: 1fr;
   }
 
+  .master-table .actions-col .action-pill {
+    padding: 0.2rem 0.4rem;
+    font-size: 0.68rem;
+  }
+
+  .master-table .actions-col .action-pill .btn-edit,
+  .master-table .actions-col .action-pill .btn-delete {
+    font-size: 0.68rem;
+  }
+
   .layout-left   .form-section.card {
     padding: 0.85rem;
   }
