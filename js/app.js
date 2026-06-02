@@ -223,7 +223,6 @@ const App = {
       var btnId = type === 'model' ? 'addModelBtn' : 'addProvinceBtn';
       var cancelId = type === 'model' ? 'cancelModelEditBtn' : 'cancelProvinceEditBtn';
       document.getElementById(inputId).value = item.name;
-      document.getElementById(inputId).focus();
       document.getElementById(btnId).textContent = 'Update';
       document.getElementById(cancelId).hidden = false;
       this._editingMaster = { type: type, id: id };
