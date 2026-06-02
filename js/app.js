@@ -316,19 +316,19 @@ const App = {
 
     var self = this;
     if (editId) {
-      InventoryDB.update(editId, record).then(function(ok) {
+      InventoryDB.update(editId, record).then(function() {
         UI.showNotification('Record updated successfully.', 'success');
         UI.clearForm();
-        if (ok) { self.refreshFromCloud(); } else { self.refresh(); }
+        self.refreshFromCloud();
       });
     } else {
       record.id = InventoryDB.generateId();
       record.createdDate = this.getCurrentDateTime();
       record.received = false;
-      InventoryDB.add(record).then(function(ok) {
+      InventoryDB.add(record).then(function() {
         UI.showNotification('Record added successfully.', 'success');
         UI.clearForm();
-        if (ok) { self.refreshFromCloud(); } else { self.refresh(); }
+        self.refreshFromCloud();
       });
     }
   },
@@ -401,16 +401,16 @@ const App = {
         return;
       }
       errorEl.textContent = '';
-      InventoryDB.update(id, { received: true, receivedDate: dateVal }).then(function(ok) {
+      InventoryDB.update(id, { received: true, receivedDate: dateVal }).then(function() {
         UI.hideReceivedDialog();
         UI.showNotification('Marked as received. Switch filter to "Received" to view.', 'success');
-        if (ok) { self.refreshFromCloud(); } else { self.refresh(); }
+        self.refreshFromCloud();
       });
     } else {
-      InventoryDB.update(id, { received: false, receivedDate: '' }).then(function(ok) {
+      InventoryDB.update(id, { received: false, receivedDate: '' }).then(function() {
         UI.hideReceivedDialog();
         UI.showNotification('Marked as not received.', 'success');
-        if (ok) { self.refreshFromCloud(); } else { self.refresh(); }
+        self.refreshFromCloud();
       });
     }
   },
@@ -422,9 +422,9 @@ const App = {
     UI.showConfirmDialog(
       `Delete record "${record.partNumber} - ${record.partName}"?`,
       () => {
-        InventoryDB.delete(id).then(function(ok) {
+        InventoryDB.delete(id).then(function() {
           UI.showNotification('Record deleted.', 'success');
-          if (ok) { self.refreshFromCloud(); } else { self.refresh(); }
+          self.refreshFromCloud();
         });
       }
     );
