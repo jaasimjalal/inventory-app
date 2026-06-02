@@ -163,6 +163,31 @@ const App = {
     document.getElementById('masterProvincesBody').addEventListener('click', function(e) {
       self._handleMasterClick(e, 'province');
     });
+
+    document.getElementById('masterSearch').addEventListener('input', function() {
+      clearTimeout(self._masterSearchTimer);
+      self._masterSearchTimer = setTimeout(function() {
+        UI.masterSearchQuery = document.getElementById('masterSearch').value.trim().toLowerCase();
+        UI.masterModelPage = 1;
+        UI.masterProvincePage = 1;
+        UI.renderMasterTables();
+      }, 300);
+    });
+
+    document.querySelectorAll('.master-page-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var table = this.dataset.table;
+        var dir = this.dataset.dir;
+        if (table === 'models') {
+          if (dir === 'prev' && UI.masterModelPage > 1) UI.masterModelPage--;
+          if (dir === 'next') UI.masterModelPage++;
+        } else {
+          if (dir === 'prev' && UI.masterProvincePage > 1) UI.masterProvincePage--;
+          if (dir === 'next') UI.masterProvincePage++;
+        }
+        UI.renderMasterTables();
+      });
+    });
   },
 
   _handleMasterClick(e, type) {
@@ -288,7 +313,7 @@ const App = {
       typeOfWork: document.getElementById('typeOfWork').value,
       workerNumber: document.getElementById('typeOfWork').value === 'Worker' ? document.getElementById('workerNumber').value.trim() : '',
       availabilityStatus: document.getElementById('availabilityStatus').value,
-      province: document.getElementById('province').value === 'Other' ? document.getElementById('provinceCustom').value.trim() : document.getElementById('province').value
+      province: document.getElementById('province').value
     };
   },
 
@@ -300,16 +325,12 @@ const App = {
     } else {
       group.hidden = true;
       document.getElementById('province').value = '';
-      document.getElementById('provinceCustom').value = '';
-      document.getElementById('provinceCustom').hidden = true;
     }
   },
 
   toggleProvinceCustom() {
-    document.getElementById('provinceCustom').hidden = document.getElementById('province').value !== 'Other';
-    if (document.getElementById('province').value !== 'Other') {
-      document.getElementById('provinceCustom').value = '';
-    }
+    document.getElementById('provinceCustom').hidden = true;
+    document.getElementById('provinceCustom').value = '';
   },
 
   handleEdit(id) {

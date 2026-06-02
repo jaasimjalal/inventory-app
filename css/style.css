@@ -51,15 +51,17 @@ body {
 
 .app-header {
   background: var(--surface);
-  border-bottom: none;
-  padding: 0.3rem 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   position: sticky;
   top: 0;
   z-index: 100;
   box-shadow: 0 2px 8px var(--shadow);
+}
+
+.header-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.3rem 1.5rem;
 }
 
 .app-header h1 {
@@ -1114,7 +1116,6 @@ tbody tr {
 .tab-bar {
   display: flex;
   border-bottom: 2px solid var(--border);
-  background: var(--surface);
   padding: 0 1.25rem;
 }
 
@@ -1162,6 +1163,26 @@ tbody tr {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
+}
+
+.master-search-bar {
+  margin-bottom: 0.75rem;
+}
+
+.master-search-bar input {
+  width: 100%;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.9rem;
+  font-family: var(--font);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.master-search-bar input:focus {
+  outline: none;
+  border-color: var(--primary);
 }
 
 .master-section {
@@ -1250,10 +1271,22 @@ tbody tr {
   font-size: 0.85rem;
 }
 
+.master-pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+  padding-top: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.master-page-info {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
 @media (max-width: 768px) {
-  .master-grid {
-    grid-template-columns: 1fr;
-  }
   .tab-btn {
     padding: 0.55rem 1rem;
     font-size: 0.82rem;
@@ -1262,7 +1295,7 @@ tbody tr {
 
 /* Mobile responsive */
 @media (max-width: 768px) {
-  .app-header {
+  .header-top-row {
     padding: 0.2rem 0.75rem;
   }
 

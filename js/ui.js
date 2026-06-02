@@ -4,6 +4,10 @@ const UI = {
   sortKey: 'createdDate',
   sortDir: 'desc',
   deleteTargetId: null,
+  masterPageSize: 10,
+  masterModelPage: 1,
+  masterProvincePage: 1,
+  masterSearchQuery: '',
 
   init() {
     this.setupWorkTypeToggle();
@@ -136,24 +140,23 @@ const UI = {
     document.getElementById('availabilityStatus').value = record.availabilityStatus || '';
     const provinceGroup = document.getElementById('provinceGroup');
       const provinceInput = document.getElementById('province');
-      const provinceCustom = document.getElementById('provinceCustom');
       if (record.availabilityStatus === 'Inside KSA') {
         provinceGroup.hidden = false;
-        var provinceNames = MasterDB.getProvinces().map(function(p) { return p.name; });
-        if (record.province && provinceNames.indexOf(record.province) === -1 && record.province !== 'Other') {
-          provinceInput.value = 'Other';
-          provinceCustom.hidden = false;
-          provinceCustom.value = record.province;
+        if (record.province) {
+          var provExists = Array.from(provinceInput.options).some(function(o) { return o.value === record.province; });
+          if (!provExists) {
+            var opt = document.createElement('option');
+            opt.value = record.province;
+            opt.textContent = record.province;
+            provinceInput.appendChild(opt);
+          }
+          provinceInput.value = record.province;
         } else {
-          provinceInput.value = record.province || '';
-          provinceCustom.hidden = true;
-          provinceCustom.value = '';
+          provinceInput.value = '';
         }
       } else {
         provinceGroup.hidden = true;
         provinceInput.value = '';
-        provinceCustom.hidden = true;
-        provinceCustom.value = '';
       }
 
     document.getElementById('formTitle').textContent = 'Edit Record';
@@ -182,8 +185,6 @@ const UI = {
     document.getElementById('availabilityStatus').value = '';
     document.getElementById('provinceGroup').hidden = true;
     document.getElementById('province').value = '';
-    document.getElementById('provinceCustom').value = '';
-    document.getElementById('provinceCustom').hidden = true;
 
     Validator.clearErrors();
   },
@@ -359,7 +360,6 @@ const UI = {
     for (var i = 0; i < provinces.length; i++) {
       html += '<option value="' + this._esc(provinces[i].name) + '">' + this._esc(provinces[i].name) + '</option>';
     }
-    html += '<option value="Other">Other</option>';
     select.innerHTML = html;
     if (currentVal) select.value = currentVal;
   },
@@ -370,18 +370,34 @@ const UI = {
   },
 
   _renderModelsTable() {
-    var models = MasterDB.getModels();
+    var allModels = MasterDB.getModels();
+    var query = this.masterSearchQuery;
+    var filtered = query ? allModels.filter(function(m) { return m.name.toLowerCase().indexOf(query) !== -1; }) : allModels;
     var tbody = document.getElementById('masterModelsBody');
     var empty = document.getElementById('masterModelsEmpty');
-    if (models.length === 0) {
+    var pagination = document.getElementById('masterModelsPagination');
+
+    if (filtered.length === 0) {
       tbody.innerHTML = '';
       empty.hidden = false;
+      pagination.classList.add('hidden');
       return;
     }
     empty.hidden = true;
+    pagination.classList.remove('hidden');
+
+    var total = filtered.length;
+    var totalPages = Math.max(1, Math.ceil(total / this.masterPageSize));
+    if (this.masterModelPage > totalPages) this.masterModelPage = totalPages;
+    if (this.masterModelPage < 1) this.masterModelPage = 1;
+
+    var start = (this.masterModelPage - 1) * this.masterPageSize;
+    var end = Math.min(start + this.masterPageSize, total);
+    var pageItems = filtered.slice(start, end);
+
     var html = '';
-    for (var i = 0; i < models.length; i++) {
-      var m = models[i];
+    for (var i = 0; i < pageItems.length; i++) {
+      var m = pageItems[i];
       html += '<tr data-master-id="' + m.id + '">';
       html += '<td class="master-name-cell">' + this._esc(m.name) + '</td>';
       html += '<td class="actions-col">';
@@ -391,21 +407,43 @@ const UI = {
       html += '</tr>';
     }
     tbody.innerHTML = html;
+
+    document.getElementById('masterModelsPageInfo').textContent = 'Page ' + this.masterModelPage + ' of ' + totalPages;
+    var prevBtn = pagination.querySelector('[data-dir="prev"]');
+    var nextBtn = pagination.querySelector('[data-dir="next"]');
+    if (prevBtn) prevBtn.disabled = this.masterModelPage <= 1;
+    if (nextBtn) nextBtn.disabled = this.masterModelPage >= totalPages;
   },
 
   _renderProvincesTable() {
-    var provinces = MasterDB.getProvinces();
+    var allProvinces = MasterDB.getProvinces();
+    var query = this.masterSearchQuery;
+    var filtered = query ? allProvinces.filter(function(p) { return p.name.toLowerCase().indexOf(query) !== -1; }) : allProvinces;
     var tbody = document.getElementById('masterProvincesBody');
     var empty = document.getElementById('masterProvincesEmpty');
-    if (provinces.length === 0) {
+    var pagination = document.getElementById('masterProvincesPagination');
+
+    if (filtered.length === 0) {
       tbody.innerHTML = '';
       empty.hidden = false;
+      pagination.classList.add('hidden');
       return;
     }
     empty.hidden = true;
+    pagination.classList.remove('hidden');
+
+    var total = filtered.length;
+    var totalPages = Math.max(1, Math.ceil(total / this.masterPageSize));
+    if (this.masterProvincePage > totalPages) this.masterProvincePage = totalPages;
+    if (this.masterProvincePage < 1) this.masterProvincePage = 1;
+
+    var start = (this.masterProvincePage - 1) * this.masterPageSize;
+    var end = Math.min(start + this.masterPageSize, total);
+    var pageItems = filtered.slice(start, end);
+
     var html = '';
-    for (var i = 0; i < provinces.length; i++) {
-      var p = provinces[i];
+    for (var i = 0; i < pageItems.length; i++) {
+      var p = pageItems[i];
       html += '<tr data-master-id="' + p.id + '">';
       html += '<td class="master-name-cell">' + this._esc(p.name) + '</td>';
       html += '<td class="actions-col">';
@@ -415,5 +453,11 @@ const UI = {
       html += '</tr>';
     }
     tbody.innerHTML = html;
+
+    document.getElementById('masterProvincesPageInfo').textContent = 'Page ' + this.masterProvincePage + ' of ' + totalPages;
+    var prevBtn = pagination.querySelector('[data-dir="prev"]');
+    var nextBtn = pagination.querySelector('[data-dir="next"]');
+    if (prevBtn) prevBtn.disabled = this.masterProvincePage <= 1;
+    if (nextBtn) nextBtn.disabled = this.masterProvincePage >= totalPages;
   }
 };
