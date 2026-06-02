@@ -164,13 +164,19 @@ const App = {
       self._handleMasterClick(e, 'province');
     });
 
-    document.getElementById('masterSearch').addEventListener('input', function() {
+    document.getElementById('masterModelSearch').addEventListener('input', function() {
       clearTimeout(self._masterSearchTimer);
       self._masterSearchTimer = setTimeout(function() {
-        UI.masterSearchQuery = document.getElementById('masterSearch').value.trim().toLowerCase();
         UI.masterModelPage = 1;
+        UI._renderModelsTable();
+      }, 300);
+    });
+
+    document.getElementById('masterProvinceSearch').addEventListener('input', function() {
+      clearTimeout(self._masterSearchTimer);
+      self._masterSearchTimer = setTimeout(function() {
         UI.masterProvincePage = 1;
-        UI.renderMasterTables();
+        UI._renderProvincesTable();
       }, 300);
     });
 

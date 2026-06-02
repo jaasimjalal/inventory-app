@@ -51,17 +51,14 @@ body {
 
 .app-header {
   background: var(--surface);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 2px 8px var(--shadow);
-}
-
-.header-top-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0.3rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px var(--shadow);
 }
 
 .app-header h1 {
@@ -1073,13 +1070,15 @@ tbody tr {
   color: var(--text);
 }
 
-  .header-left {
-    gap: 0.4rem;
-  }
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
 
-  .brand-icon {
-  width: 80px;
-  height: 80px;
+.brand-icon {
+  width: 36px;
+  height: 36px;
   display: block;
 }
 
@@ -1115,39 +1114,30 @@ tbody tr {
 /* Tab bar */
 .tab-bar {
   display: flex;
-  border-bottom: 2px solid var(--border);
-  padding: 0 1.25rem;
+  gap: 0.25rem;
 }
 
 .tab-btn {
-  padding: 0.65rem 1.5rem;
-  font-size: 0.88rem;
+  padding: 0.4rem 1rem;
+  font-size: 0.83rem;
   font-weight: 600;
   font-family: var(--font);
   border: none;
   background: transparent;
   color: var(--text-secondary);
   cursor: pointer;
-  position: relative;
-  transition: color 0.15s;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s, color 0.15s;
 }
 
 .tab-btn:hover {
+  background: var(--surface-hover);
   color: var(--text);
 }
 
 .tab-btn.active {
+  background: color-mix(in srgb, var(--primary) 10%, transparent);
   color: var(--primary);
-}
-
-.tab-btn.active::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--primary);
 }
 
 .tab-content {
@@ -1288,14 +1278,14 @@ tbody tr {
 
 @media (max-width: 768px) {
   .tab-btn {
-    padding: 0.55rem 1rem;
-    font-size: 0.82rem;
+    padding: 0.3rem 0.65rem;
+    font-size: 0.75rem;
   }
 }
 
 /* Mobile responsive */
 @media (max-width: 768px) {
-  .header-top-row {
+  .app-header {
     padding: 0.2rem 0.75rem;
   }
 
@@ -1304,16 +1294,9 @@ tbody tr {
   }
 
   .brand-icon {
-    width: 48px;
-    height: 48px;
+    width: 28px;
+    height: 28px;
   }
-
-  .header-left {
-    gap: 0.4rem;
-  }
-
-  .app-header h1 {
-    font-size: 1.05rem;
   }
 
   .app-main {

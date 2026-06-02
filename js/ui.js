@@ -7,7 +7,6 @@ const UI = {
   masterPageSize: 10,
   masterModelPage: 1,
   masterProvincePage: 1,
-  masterSearchQuery: '',
 
   init() {
     this.setupWorkTypeToggle();
@@ -371,7 +370,7 @@ const UI = {
 
   _renderModelsTable() {
     var allModels = MasterDB.getModels();
-    var query = this.masterSearchQuery;
+    var query = document.getElementById('masterModelSearch').value.trim().toLowerCase();
     var filtered = query ? allModels.filter(function(m) { return m.name.toLowerCase().indexOf(query) !== -1; }) : allModels;
     var tbody = document.getElementById('masterModelsBody');
     var empty = document.getElementById('masterModelsEmpty');
@@ -417,7 +416,7 @@ const UI = {
 
   _renderProvincesTable() {
     var allProvinces = MasterDB.getProvinces();
-    var query = this.masterSearchQuery;
+    var query = document.getElementById('masterProvinceSearch').value.trim().toLowerCase();
     var filtered = query ? allProvinces.filter(function(p) { return p.name.toLowerCase().indexOf(query) !== -1; }) : allProvinces;
     var tbody = document.getElementById('masterProvincesBody');
     var empty = document.getElementById('masterProvincesEmpty');
