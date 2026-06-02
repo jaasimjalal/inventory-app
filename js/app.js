@@ -4,18 +4,17 @@ const App = {
 
   init() {
     var self = this;
-    var result = InventoryDB.init();
-    if (result && typeof result.then === 'function') {
-      result.then(function() {
-        UI.init();
-        self.setupEventListeners();
-        self.refresh();
-      });
-    } else {
+    var dbInit = InventoryDB.init();
+    var masterInit = MasterDB.init();
+    Promise.all([dbInit, masterInit]).then(function() {
       UI.init();
-      this.setupEventListeners();
-      this.refresh();
-    }
+      self.setupEventListeners();
+      self.setupMasterEventListeners();
+      self.setupTabs();
+      UI.populateModelDropdown();
+      UI.populateProvinceDropdown();
+      self.refresh();
+    });
   },
 
   setupEventListeners() {
@@ -125,6 +124,127 @@ const App = {
       UI.hideReceivedDialog();
       this.refresh();
     });
+  },
+
+  setupTabs() {
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(function(tc) { tc.classList.remove('active'); });
+        document.getElementById('tab' + this.dataset.tab.charAt(0).toUpperCase() + this.dataset.tab.slice(1)).classList.add('active');
+      });
+    });
+  },
+
+  setupMasterEventListeners() {
+    var self = this;
+
+    document.getElementById('addModelBtn').addEventListener('click', function() {
+      self._addMasterItem('model');
+    });
+
+    document.getElementById('masterModelInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); self._addMasterItem('model'); }
+    });
+
+    document.getElementById('addProvinceBtn').addEventListener('click', function() {
+      self._addMasterItem('province');
+    });
+
+    document.getElementById('masterProvinceInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); self._addMasterItem('province'); }
+    });
+
+    document.getElementById('masterModelsBody').addEventListener('click', function(e) {
+      self._handleMasterClick(e, 'model');
+    });
+
+    document.getElementById('masterProvincesBody').addEventListener('click', function(e) {
+      self._handleMasterClick(e, 'province');
+    });
+  },
+
+  _handleMasterClick(e, type) {
+    var self = this;
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    var id = btn.dataset.id;
+    if (!id) return;
+
+    if (btn.classList.contains('master-edit-btn')) {
+      var row = btn.closest('tr');
+      var nameCell = row.querySelector('.master-name-cell');
+      var currentName = nameCell.textContent;
+      nameCell.innerHTML = '<div class="master-edit-row"><input type="text" class="master-edit-input" value="' + currentName + '"><button class="btn btn-small btn-primary master-save-btn" data-id="' + id + '" data-type="' + type + '">Save</button><button class="btn btn-small btn-secondary master-cancel-btn">Cancel</button></div>';
+    }
+
+    if (btn.classList.contains('master-save-btn')) {
+      var row = btn.closest('tr');
+      var input = row.querySelector('.master-edit-input');
+      var newName = input.value.trim();
+      if (!newName) return;
+      var collection = type === 'model' ? MasterDB.getModels() : MasterDB.getProvinces();
+      var exists = collection.some(function(item) { return item.name.toLowerCase() === newName.toLowerCase() && item.id !== id; });
+      if (exists) {
+        UI.showNotification('Duplicate name.', 'error');
+        return;
+      }
+      if (type === 'model') {
+        MasterDB.updateModel(id, newName);
+        UI.populateModelDropdown();
+      } else {
+        MasterDB.updateProvince(id, newName);
+        UI.populateProvinceDropdown();
+      }
+      UI.renderMasterTables();
+      UI.showNotification(type.charAt(0).toUpperCase() + type.slice(1) + ' updated.', 'success');
+    }
+
+    if (btn.classList.contains('master-cancel-btn')) {
+      UI.renderMasterTables();
+    }
+
+    if (btn.classList.contains('master-delete-btn')) {
+      var name = type === 'model' ? 'model' : 'province';
+      UI.showConfirmDialog('Delete this ' + name + '? It may affect existing records.', function() {
+        if (type === 'model') {
+          MasterDB.deleteModel(id);
+          UI.populateModelDropdown();
+        } else {
+          MasterDB.deleteProvince(id);
+          UI.populateProvinceDropdown();
+        }
+        UI.renderMasterTables();
+        UI.showNotification(name.charAt(0).toUpperCase() + name.slice(1) + ' deleted.', 'success');
+      });
+    }
+  },
+
+  _addMasterItem(type) {
+    var inputId = type === 'model' ? 'masterModelInput' : 'masterProvinceInput';
+    var input = document.getElementById(inputId);
+    var name = input.value.trim();
+    if (!name) {
+      UI.showNotification('Please enter a name.', 'error');
+      return;
+    }
+    var collection = type === 'model' ? MasterDB.getModels() : MasterDB.getProvinces();
+    var exists = collection.some(function(item) { return item.name.toLowerCase() === name.toLowerCase(); });
+    if (exists) {
+      UI.showNotification(type.charAt(0).toUpperCase() + type.slice(1) + ' already exists.', 'error');
+      return;
+    }
+    if (type === 'model') {
+      MasterDB.addModel(name);
+      UI.populateModelDropdown();
+    } else {
+      MasterDB.addProvince(name);
+      UI.populateProvinceDropdown();
+    }
+    input.value = '';
+    UI.renderMasterTables();
+    UI.showNotification(type.charAt(0).toUpperCase() + type.slice(1) + ' added.', 'success');
   },
 
   handleFormSubmit() {

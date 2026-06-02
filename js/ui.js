@@ -106,7 +106,19 @@ const UI = {
     document.getElementById('editId').value = record.id;
     document.getElementById('partNumber').value = record.partNumber;
     document.getElementById('partName').value = record.partName;
-    document.getElementById('model').value = record.model;
+    var modelSelect = document.getElementById('model');
+    if (record.model) {
+      var modelExists = Array.from(modelSelect.options).some(function(o) { return o.value === record.model; });
+      if (!modelExists) {
+        var opt = document.createElement('option');
+        opt.value = record.model;
+        opt.textContent = record.model;
+        modelSelect.appendChild(opt);
+      }
+      modelSelect.value = record.model;
+    } else {
+      modelSelect.value = '';
+    }
     document.getElementById('quantity').value = record.quantity;
     document.getElementById('chassis').value = record.chassis;
     const workerGroup = document.getElementById('workerNumberGroup');
@@ -123,26 +135,26 @@ const UI = {
     }
     document.getElementById('availabilityStatus').value = record.availabilityStatus || '';
     const provinceGroup = document.getElementById('provinceGroup');
-    const provinceInput = document.getElementById('province');
-    const provinceCustom = document.getElementById('provinceCustom');
-    if (record.availabilityStatus === 'Inside KSA') {
-      provinceGroup.hidden = false;
-      var predefined = ['Riyadh','Dammam','Jeddah','Jubail','Tabuk'];
-      if (record.province && predefined.indexOf(record.province) === -1) {
-        provinceInput.value = 'Other';
-        provinceCustom.hidden = false;
-        provinceCustom.value = record.province;
+      const provinceInput = document.getElementById('province');
+      const provinceCustom = document.getElementById('provinceCustom');
+      if (record.availabilityStatus === 'Inside KSA') {
+        provinceGroup.hidden = false;
+        var provinceNames = MasterDB.getProvinces().map(function(p) { return p.name; });
+        if (record.province && provinceNames.indexOf(record.province) === -1 && record.province !== 'Other') {
+          provinceInput.value = 'Other';
+          provinceCustom.hidden = false;
+          provinceCustom.value = record.province;
+        } else {
+          provinceInput.value = record.province || '';
+          provinceCustom.hidden = true;
+          provinceCustom.value = '';
+        }
       } else {
-        provinceInput.value = record.province || '';
+        provinceGroup.hidden = true;
+        provinceInput.value = '';
         provinceCustom.hidden = true;
         provinceCustom.value = '';
       }
-    } else {
-      provinceGroup.hidden = true;
-      provinceInput.value = '';
-      provinceCustom.hidden = true;
-      provinceCustom.value = '';
-    }
 
     document.getElementById('formTitle').textContent = 'Edit Record';
     document.getElementById('editBadge').classList.remove('hidden');
@@ -323,5 +335,85 @@ const UI = {
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
+  },
+
+  populateModelDropdown() {
+    var select = document.getElementById('model');
+    var currentVal = select.value;
+    var models = MasterDB.getModels();
+    select.innerHTML = '<option value="">Select Model</option>';
+    for (var i = 0; i < models.length; i++) {
+      var opt = document.createElement('option');
+      opt.value = models[i].name;
+      opt.textContent = models[i].name;
+      select.appendChild(opt);
+    }
+    if (currentVal) select.value = currentVal;
+  },
+
+  populateProvinceDropdown() {
+    var select = document.getElementById('province');
+    var currentVal = select.value;
+    var provinces = MasterDB.getProvinces();
+    var html = '<option value="">-- Select Province --</option>';
+    for (var i = 0; i < provinces.length; i++) {
+      html += '<option value="' + this._esc(provinces[i].name) + '">' + this._esc(provinces[i].name) + '</option>';
+    }
+    html += '<option value="Other">Other</option>';
+    select.innerHTML = html;
+    if (currentVal) select.value = currentVal;
+  },
+
+  renderMasterTables() {
+    this._renderModelsTable();
+    this._renderProvincesTable();
+  },
+
+  _renderModelsTable() {
+    var models = MasterDB.getModels();
+    var tbody = document.getElementById('masterModelsBody');
+    var empty = document.getElementById('masterModelsEmpty');
+    if (models.length === 0) {
+      tbody.innerHTML = '';
+      empty.hidden = false;
+      return;
+    }
+    empty.hidden = true;
+    var html = '';
+    for (var i = 0; i < models.length; i++) {
+      var m = models[i];
+      html += '<tr data-master-id="' + m.id + '">';
+      html += '<td class="master-name-cell">' + this._esc(m.name) + '</td>';
+      html += '<td class="actions-col">';
+      html += '<span class="action-pill edit-pill"><button class="btn btn-small btn-edit master-edit-btn" data-id="' + m.id + '" data-type="model" title="Edit">&#9998; Edit</button></span> ';
+      html += '<span class="action-pill delete-pill"><button class="btn btn-small btn-delete master-delete-btn" data-id="' + m.id + '" data-type="model" title="Delete">&#128465; Delete</button></span>';
+      html += '</td>';
+      html += '</tr>';
+    }
+    tbody.innerHTML = html;
+  },
+
+  _renderProvincesTable() {
+    var provinces = MasterDB.getProvinces();
+    var tbody = document.getElementById('masterProvincesBody');
+    var empty = document.getElementById('masterProvincesEmpty');
+    if (provinces.length === 0) {
+      tbody.innerHTML = '';
+      empty.hidden = false;
+      return;
+    }
+    empty.hidden = true;
+    var html = '';
+    for (var i = 0; i < provinces.length; i++) {
+      var p = provinces[i];
+      html += '<tr data-master-id="' + p.id + '">';
+      html += '<td class="master-name-cell">' + this._esc(p.name) + '</td>';
+      html += '<td class="actions-col">';
+      html += '<span class="action-pill edit-pill"><button class="btn btn-small btn-edit master-edit-btn" data-id="' + p.id + '" data-type="province" title="Edit">&#9998; Edit</button></span> ';
+      html += '<span class="action-pill delete-pill"><button class="btn btn-small btn-delete master-delete-btn" data-id="' + p.id + '" data-type="province" title="Delete">&#128465; Delete</button></span>';
+      html += '</td>';
+      html += '</tr>';
+    }
+    tbody.innerHTML = html;
   }
 };

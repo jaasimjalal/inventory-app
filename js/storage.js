@@ -1,3 +1,186 @@
+var MasterDB = {
+  _models: [],
+  _provinces: [],
+  _supabaseUrl: '',
+  _supabaseKey: '',
+
+  init: function() {
+    var self = this;
+    var configEl = document.getElementById('supabase-config');
+    if (configEl) {
+      try {
+        var cfg = JSON.parse(configEl.textContent);
+        this._supabaseUrl = cfg.url;
+        this._supabaseKey = cfg.key;
+      } catch (e) {}
+    }
+    if (!this._supabaseUrl) {
+      this._supabaseUrl = 'REPLACE_WITH_YOUR_SUPABASE_URL';
+      this._supabaseKey = 'REPLACE_WITH_YOUR_SUPABASE_ANON_KEY';
+    }
+    return Promise.all([this._fetchModels(), this._fetchProvinces()]);
+  },
+
+  getModels: function() {
+    return this._models;
+  },
+
+  getProvinces: function() {
+    return this._provinces;
+  },
+
+  addModel: function(name) {
+    var self = this;
+    var tempId = 'tmp_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+    this._models.push({ id: tempId, name: name });
+    this._apiCall('POST', 'master_models', '', { name: name }).then(function() {
+      return self._fetchModels();
+    }).catch(function(e) {
+      console.error('Supabase POST master_models error:', e.message);
+    });
+  },
+
+  addProvince: function(name) {
+    var self = this;
+    var tempId = 'tmp_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+    this._provinces.push({ id: tempId, name: name });
+    this._apiCall('POST', 'master_provinces', '', { name: name }).then(function() {
+      return self._fetchProvinces();
+    }).catch(function(e) {
+      console.error('Supabase POST master_provinces error:', e.message);
+    });
+  },
+
+  updateModel: function(id, name) {
+    var self = this;
+    var idx = this._models.findIndex(function(m) { return m.id === id; });
+    if (idx === -1) return null;
+    this._models[idx].name = name;
+    this._apiCall('PATCH', 'master_models', '?id=eq.' + encodeURIComponent(id), { name: name }).then(function() {
+      return self._fetchModels();
+    }).catch(function(e) {
+      console.error('Supabase PATCH master_models error:', e.message);
+    });
+    return this._models[idx];
+  },
+
+  updateProvince: function(id, name) {
+    var self = this;
+    var idx = this._provinces.findIndex(function(p) { return p.id === id; });
+    if (idx === -1) return null;
+    this._provinces[idx].name = name;
+    this._apiCall('PATCH', 'master_provinces', '?id=eq.' + encodeURIComponent(id), { name: name }).then(function() {
+      return self._fetchProvinces();
+    }).catch(function(e) {
+      console.error('Supabase PATCH master_provinces error:', e.message);
+    });
+    return this._provinces[idx];
+  },
+
+  deleteModel: function(id) {
+    var self = this;
+    var idx = this._models.findIndex(function(m) { return m.id === id; });
+    if (idx === -1) return false;
+    this._models.splice(idx, 1);
+    this._apiCall('DELETE', 'master_models', '?id=eq.' + encodeURIComponent(id)).then(function() {
+      return self._fetchModels();
+    }).catch(function(e) {
+      console.error('Supabase DELETE master_models error:', e.message);
+    });
+    return true;
+  },
+
+  deleteProvince: function(id) {
+    var self = this;
+    var idx = this._provinces.findIndex(function(p) { return p.id === id; });
+    if (idx === -1) return false;
+    this._provinces.splice(idx, 1);
+    this._apiCall('DELETE', 'master_provinces', '?id=eq.' + encodeURIComponent(id)).then(function() {
+      return self._fetchProvinces();
+    }).catch(function(e) {
+      console.error('Supabase DELETE master_provinces error:', e.message);
+    });
+    return true;
+  },
+
+  _fetchModels: function() {
+    var self = this;
+    return this._apiCall('GET', 'master_models', '?select=*&order=name.asc')
+      .then(function(data) {
+        self._models = (data || []).map(function(r) { return { id: r.id, name: r.name, createdAt: r.created_at }; });
+        return self._models;
+      })
+      .catch(function(e) {
+        console.error('Supabase GET master_models error:', e.message);
+        self._models = [];
+        return self._models;
+      });
+  },
+
+  _fetchProvinces: function() {
+    var self = this;
+    return this._apiCall('GET', 'master_provinces', '?select=*&order=name.asc')
+      .then(function(data) {
+        self._provinces = (data || []).map(function(r) { return { id: r.id, name: r.name, createdAt: r.created_at }; });
+        return self._provinces;
+      })
+      .catch(function(e) {
+        console.error('Supabase GET master_provinces error:', e.message);
+        self._provinces = [];
+        return self._provinces;
+      });
+  },
+
+  _lowKeys: function(obj) {
+    var out = {};
+    var keys = Object.keys(obj);
+    for (var i = 0; i < keys.length; i++) {
+      out[keys[i].toLowerCase()] = obj[keys[i]];
+    }
+    return out;
+  },
+
+  _apiCall: function(method, table, query, body) {
+    var url = this._supabaseUrl + '/rest/v1/' + table + query;
+    var headers = {
+      'apikey': this._supabaseKey,
+      'Authorization': 'Bearer ' + this._supabaseKey,
+      'Content-Type': 'application/json'
+    };
+    var opts = {
+      method: method,
+      headers: headers
+    };
+    if (method === 'POST' || method === 'PATCH') {
+      opts.headers['Prefer'] = 'return=minimal';
+    }
+    if (body && (method === 'POST' || method === 'PATCH')) {
+      opts.body = JSON.stringify(this._lowKeys(body));
+    }
+    return fetch(url, opts).then(function(res) {
+      if (!res.ok) {
+        return res.clone().json().then(function(body) {
+          throw new Error('API error ' + res.status + ': ' + (body.message || JSON.stringify(body)));
+        }).catch(function() {
+          return res.text().then(function(text) {
+            throw new Error('API error ' + res.status + ': ' + (text || '(no body)'));
+          });
+        });
+      }
+      if (method === 'DELETE') return null;
+      return res.json().catch(function() { return null; });
+    });
+  },
+
+  reloadModels: function() {
+    return this._fetchModels();
+  },
+
+  reloadProvinces: function() {
+    return this._fetchProvinces();
+  }
+};
+
 var InventoryDB = {
   _data: [],
   _supabaseUrl: '',

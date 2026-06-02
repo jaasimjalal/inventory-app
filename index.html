@@ -34,7 +34,14 @@
     </div>
   </header>
 
+  <nav class="tab-bar">
+    <button class="tab-btn active" data-tab="inventory">Inventory</button>
+    <button class="tab-btn" data-tab="master">Master Data</button>
+  </nav>
+
   <main class="app-main">
+
+    <div id="tabInventory" class="tab-content active">
 
     <div class="layout-two-col">
 
@@ -62,8 +69,10 @@
               </div>
 
               <div class="form-group col-1">
-                <label for="model">Model <span class="required">*</span></label>
-                <input type="text" id="model" required autocomplete="off">
+                <label for="model">Model</label>
+                <select id="model">
+                  <option value="">Select Model</option>
+                </select>
                 <span class="field-error"></span>
               </div>
 
@@ -91,13 +100,6 @@
               <div class="form-group col-full" id="provinceGroup" hidden>
                 <label for="province">Province <span class="required">*</span></label>
                 <select id="province">
-                  <option value="">-- Select Province --</option>
-                  <option value="Riyadh">Riyadh</option>
-                  <option value="Dammam">Dammam</option>
-                  <option value="Jeddah">Jeddah</option>
-                  <option value="Jubail">Jubail</option>
-                  <option value="Tabuk">Tabuk</option>
-                  <option value="Other">Other</option>
                 </select>
                 <input type="text" id="provinceCustom" placeholder="Enter province name" hidden>
                 <span class="field-error"></span>
@@ -227,6 +229,56 @@
     </section>
 
       </div>
+    </div>
+
+    </div>
+
+    <div id="tabMaster" class="tab-content">
+
+      <div class="master-grid">
+
+        <section class="card master-section">
+          <h3 class="section-title">Models</h3>
+          <div class="master-form">
+            <input type="text" id="masterModelInput" placeholder="Enter model name" autocomplete="off">
+            <button id="addModelBtn" class="btn btn-primary btn-small">Add</button>
+          </div>
+          <div id="masterModelsWrapper">
+            <table class="master-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="masterModelsBody"></tbody>
+            </table>
+            <div id="masterModelsEmpty" class="master-empty">No models added yet.</div>
+          </div>
+        </section>
+
+        <section class="card master-section">
+          <h3 class="section-title">Provinces</h3>
+          <div class="master-form">
+            <input type="text" id="masterProvinceInput" placeholder="Enter province name" autocomplete="off">
+            <button id="addProvinceBtn" class="btn btn-primary btn-small">Add</button>
+          </div>
+          <div id="masterProvincesWrapper">
+            <table class="master-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="masterProvincesBody"></tbody>
+            </table>
+            <div id="masterProvincesEmpty" class="master-empty">No provinces added yet.</div>
+          </div>
+        </section>
+
+      </div>
+
     </div>
 
   </main>

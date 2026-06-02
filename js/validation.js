@@ -15,10 +15,6 @@ const Validator = {
       errors.push({ field: 'partName', message: 'Part Name is required.' });
     }
 
-    if (!record.model || !record.model.trim()) {
-      errors.push({ field: 'model', message: 'Model is required.' });
-    }
-
     if (record.quantity === undefined || record.quantity === null || record.quantity === '') {
       errors.push({ field: 'quantity', message: 'Quantity is required.' });
     } else if (!Number.isInteger(Number(record.quantity)) || Number(record.quantity) < 1) {

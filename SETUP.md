@@ -53,6 +53,32 @@ Then insert a test user:
 INSERT INTO users (username, password) VALUES ('admin', 'admin123');
 ```
 
+## 1c. Create master data tables
+
+In **SQL Editor**, run:
+
+```sql
+CREATE TABLE IF NOT EXISTS master_models (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  name text NOT NULL UNIQUE,
+  created_at timestamptz DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS master_provinces (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  name text NOT NULL UNIQUE,
+  created_at timestamptz DEFAULT now()
+);
+
+ALTER TABLE master_models ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "anon_all" ON master_models FOR ALL USING (true) WITH CHECK (true);
+GRANT ALL ON master_models TO anon;
+
+ALTER TABLE master_provinces ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "anon_all" ON master_provinces FOR ALL USING (true) WITH CHECK (true);
+GRANT ALL ON master_provinces TO anon;
+```
+
 ## 2. Get API keys
 
 1. Go to left sidebar → **Project Settings** → **API**
