@@ -1367,6 +1367,10 @@ tbody tr {
     font-size: 0.7rem;
   }
 
+  .master-header .master-search-bar {
+    flex: 0 0 130px;
+  }
+
   .layout-left .form-section.card {
     padding: 0.85rem;
   }
