@@ -401,7 +401,8 @@ const App = {
         return;
       }
       errorEl.textContent = '';
-      InventoryDB.update(id, { received: true, receivedDate: dateVal }).then(function() {
+      var formattedDate = dateVal.replace('T', ' ') + ':00';
+      InventoryDB.update(id, { received: true, receivedDate: formattedDate }).then(function() {
         UI.hideReceivedDialog();
         UI.showNotification('Marked as received. Switch filter to "Received" to view.', 'success');
         self.refreshFromCloud();
