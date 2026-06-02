@@ -209,6 +209,7 @@ const App = {
       var row = btn.closest('tr');
       var nameCell = row.querySelector('.master-name-cell');
       var currentName = nameCell.textContent;
+      row.classList.add('editing');
       nameCell.innerHTML = '<div class="master-edit-row"><input type="text" class="master-edit-input" value="' + currentName + '"><button class="btn btn-small btn-primary master-save-btn" data-id="' + id + '" data-type="' + type + '">Save</button><button class="btn btn-small btn-secondary master-cancel-btn">Cancel</button></div>';
     }
 

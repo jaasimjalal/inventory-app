@@ -1254,6 +1254,10 @@ tbody tr {
   border-color: var(--primary);
 }
 
+.master-table tr.editing .actions-col {
+  display: none;
+}
+
 .master-empty {
   text-align: center;
   color: var(--text-secondary);
