@@ -16,17 +16,31 @@ const UI = {
 
   setupWorkTypeToggle() {
     const typeSelect = document.getElementById('typeOfWork');
-    const workerGroup = document.getElementById('workerNumberGroup');
-    const workerInput = document.getElementById('workerNumber');
+    const csGroup = document.getElementById('counterSaleGroup');
+    const woGroup = document.getElementById('workOrderGroup');
+    const csInput = document.getElementById('counterSaleNumber');
+    const woInput = document.getElementById('workOrderNumber');
 
     const toggle = () => {
-      if (typeSelect.value === 'Worker') {
-        workerGroup.hidden = false;
-        workerGroup.style.display = 'flex';
+      if (typeSelect.value === 'Counter Sale') {
+        csGroup.hidden = false;
+        csGroup.style.display = 'flex';
+        woGroup.hidden = true;
+        woGroup.style.display = 'none';
+        woInput.value = '';
+      } else if (typeSelect.value === 'Work Order') {
+        woGroup.hidden = false;
+        woGroup.style.display = 'flex';
+        csGroup.hidden = true;
+        csGroup.style.display = 'none';
+        csInput.value = '';
       } else {
-        workerGroup.hidden = true;
-        workerGroup.style.display = 'none';
-        workerInput.value = '';
+        csGroup.hidden = true;
+        csGroup.style.display = 'none';
+        csInput.value = '';
+        woGroup.hidden = true;
+        woGroup.style.display = 'none';
+        woInput.value = '';
       }
     };
 
@@ -124,17 +138,32 @@ const UI = {
     }
     document.getElementById('quantity').value = record.quantity;
     document.getElementById('chassis').value = record.chassis;
-    const workerGroup = document.getElementById('workerNumberGroup');
-    const workerInput = document.getElementById('workerNumber');
+    const csGroup = document.getElementById('counterSaleGroup');
+    const woGroup = document.getElementById('workOrderGroup');
+    const csInput = document.getElementById('counterSaleNumber');
+    const woInput = document.getElementById('workOrderNumber');
     document.getElementById('typeOfWork').value = record.typeOfWork;
-    if (record.typeOfWork === 'Worker') {
-      workerGroup.hidden = false;
-      workerGroup.style.display = 'flex';
-      workerInput.value = record.workerNumber || '';
+    if (record.typeOfWork === 'Counter Sale') {
+      csGroup.hidden = false;
+      csGroup.style.display = 'flex';
+      csInput.value = record.counterSaleNumber || '';
+      woGroup.hidden = true;
+      woGroup.style.display = 'none';
+      woInput.value = '';
+    } else if (record.typeOfWork === 'Work Order') {
+      woGroup.hidden = false;
+      woGroup.style.display = 'flex';
+      woInput.value = record.workOrderNumber || '';
+      csGroup.hidden = true;
+      csGroup.style.display = 'none';
+      csInput.value = '';
     } else {
-      workerGroup.hidden = true;
-      workerGroup.style.display = 'none';
-      workerInput.value = '';
+      csGroup.hidden = true;
+      csGroup.style.display = 'none';
+      csInput.value = '';
+      woGroup.hidden = true;
+      woGroup.style.display = 'none';
+      woInput.value = '';
     }
     document.getElementById('availabilityStatus').value = record.availabilityStatus || '';
     const provinceGroup = document.getElementById('provinceGroup');
@@ -172,9 +201,10 @@ const UI = {
   clearForm() {
     document.getElementById('editId').value = '';
     document.getElementById('recordForm').reset();
-    const wg = document.getElementById('workerNumberGroup');
-    wg.hidden = true;
-    wg.style.display = 'none';
+    document.getElementById('counterSaleGroup').hidden = true;
+    document.getElementById('counterSaleGroup').style.display = 'none';
+    document.getElementById('workOrderGroup').hidden = true;
+    document.getElementById('workOrderGroup').style.display = 'none';
 
     document.getElementById('formTitle').textContent = 'Register Part';
     document.getElementById('editBadge').classList.add('hidden');
@@ -220,7 +250,7 @@ const UI = {
         <td data-label="Status">${r.availabilityStatus ? `<span class="status-badge ${r.availabilityStatus === 'Inside KSA' ? 'status-inside' : 'status-outside'}">${this._esc(r.availabilityStatus)}</span>` : ''}</td>
         <td data-label="Province">${r.availabilityStatus === 'Inside KSA' ? this._esc(r.province) : '-'}</td>
         <td data-label="Work">${this._esc(r.typeOfWork)}</td>
-        <td data-label="Worker No">${r.typeOfWork === 'Worker' ? this._esc(r.workerNumber) : '-'}</td>
+        <td data-label="Ref #">${r.typeOfWork === 'Counter Sale' ? this._esc(r.counterSaleNumber) : r.typeOfWork === 'Work Order' ? this._esc(r.workOrderNumber) : '-'}</td>
         <td class="date-col" data-label="Created">${r.createdDate}</td>
         <td class="toggle-col" data-label="Received">
           <button class="toggle-switch received-toggle-btn ${r.received ? 'toggle-on' : ''}" data-id="${r.id}" data-received="${r.received}" title="${r.received ? 'Mark as not received' : 'Mark as received'}">
@@ -321,7 +351,7 @@ const UI = {
     document.getElementById('recQuantity').textContent = record.quantity;
     document.getElementById('recChassis').textContent = record.chassis;
     document.getElementById('recTypeOfWork').textContent = record.typeOfWork;
-    document.getElementById('recWorkerNumber').textContent = record.typeOfWork === 'Worker' ? (record.workerNumber || '-') : '-';
+    document.getElementById('recWorkerNumber').textContent = record.typeOfWork === 'Counter Sale' ? (record.counterSaleNumber || '-') : record.typeOfWork === 'Work Order' ? (record.workOrderNumber || '-') : '-';
     document.getElementById('recAvailability').textContent = record.availabilityStatus;
     document.getElementById('recProvince').textContent = record.availabilityStatus === 'Inside KSA' ? (record.province || '-') : '-';
   },

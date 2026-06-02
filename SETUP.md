@@ -18,6 +18,8 @@ create table records (
   availabilityStatus text default '',
   typeOfWork text,
   workerNumber text,
+  counterSaleNumber text,
+  workOrderNumber text,
   received boolean default false,
   receivedDate text,
   createdDate text
@@ -26,6 +28,13 @@ create table records (
 ALTER TABLE records ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "anon_all" ON records FOR ALL USING (true) WITH CHECK (true);
 GRANT ALL ON records TO anon;
+```
+
+To add the new Counter Sale and Work Order columns (run this separately if you already created the table):
+
+```sql
+ALTER TABLE records ADD COLUMN IF NOT EXISTS counterSaleNumber text;
+ALTER TABLE records ADD COLUMN IF NOT EXISTS workOrderNumber text;
 ```
 
 This creates the table and allows public read/write from your app.

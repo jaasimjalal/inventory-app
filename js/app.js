@@ -310,14 +310,16 @@ const App = {
   },
 
   gatherFormData() {
+    var typeOfWork = document.getElementById('typeOfWork').value;
     return {
       partNumber: document.getElementById('partNumber').value.trim(),
       partName: document.getElementById('partName').value.trim(),
       model: document.getElementById('model').value.trim(),
       quantity: document.getElementById('quantity').value === '' ? null : Number(document.getElementById('quantity').value),
       chassis: document.getElementById('chassis').value.trim(),
-      typeOfWork: document.getElementById('typeOfWork').value,
-      workerNumber: document.getElementById('typeOfWork').value === 'Worker' ? document.getElementById('workerNumber').value.trim() : '',
+      typeOfWork: typeOfWork,
+      counterSaleNumber: typeOfWork === 'Counter Sale' ? document.getElementById('counterSaleNumber').value.trim() : '',
+      workOrderNumber: typeOfWork === 'Work Order' ? document.getElementById('workOrderNumber').value.trim() : '',
       availabilityStatus: document.getElementById('availabilityStatus').value,
       province: document.getElementById('province').value
     };
@@ -444,7 +446,7 @@ const App = {
       return;
     }
 
-    const headers = ['Part Number', 'Part Name', 'Model', 'Quantity', 'Chassis', 'Availability Status', 'Province', 'Type of Work', 'Worker Number', 'Received', 'Received Date', 'Created Date'];
+    const headers = ['Part Number', 'Part Name', 'Model', 'Quantity', 'Chassis', 'Availability Status', 'Province', 'Type of Work', 'Counter Sale #', 'Work Order #', 'Received', 'Received Date', 'Created Date'];
     const rows = records.map(r => [
       r.partNumber,
       r.partName,
@@ -454,7 +456,8 @@ const App = {
       r.availabilityStatus,
       r.availabilityStatus === 'Inside KSA' ? (r.province || '') : '-',
       r.typeOfWork,
-      r.typeOfWork === 'Worker' ? (r.workerNumber || '') : '-',
+      r.typeOfWork === 'Counter Sale' ? (r.counterSaleNumber || '') : '-',
+      r.typeOfWork === 'Work Order' ? (r.workOrderNumber || '') : '-',
       r.received ? 'Yes' : 'No',
       r.receivedDate || '-',
       r.createdDate
