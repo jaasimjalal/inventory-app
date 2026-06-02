@@ -250,7 +250,7 @@ const UI = {
         <td data-label="Part Number">${this._esc(r.partNumber)}</td>
         <td data-label="Part Name">${this._esc(r.partName)}</td>
         <td data-label="Model">${this._esc(r.model)}</td>
-        <td data-label="Qty">${r.quantity}</td>
+        <td data-label="Quantity">${r.quantity}</td>
         <td data-label="Chassis">${this._esc(r.chassis)}</td>
         <td data-label="Type of Work">${this._esc(r.typeOfWork)}</td>
         <td data-label="${r.typeOfWork === 'Counter Sale' ? 'Counter Sale #' : r.typeOfWork === 'Work Order' ? 'Work Order #' : ''}">${r.typeOfWork === 'Counter Sale' ? this._esc(r.counterSaleNumber) : r.typeOfWork === 'Work Order' ? this._esc(r.workOrderNumber) : '-'}</td>
