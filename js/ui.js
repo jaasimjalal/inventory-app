@@ -357,18 +357,26 @@ const UI = {
     document.getElementById('recChassis').textContent = record.chassis;
     document.getElementById('recTypeOfWork').textContent = record.typeOfWork;
     var refLabel = document.getElementById('recRefLabel');
+    var refRow = document.getElementById('recRefRow');
     if (record.typeOfWork === 'Counter Sale') {
       refLabel.textContent = 'Counter Sale #:';
       document.getElementById('recWorkerNumber').textContent = record.counterSaleNumber || '-';
+      refRow.hidden = false;
     } else if (record.typeOfWork === 'Work Order') {
       refLabel.textContent = 'Work Order #:';
       document.getElementById('recWorkerNumber').textContent = record.workOrderNumber || '-';
+      refRow.hidden = false;
     } else {
-      refLabel.textContent = 'Ref #:';
-      document.getElementById('recWorkerNumber').textContent = '-';
+      refRow.hidden = true;
     }
     document.getElementById('recAvailability').textContent = record.availabilityStatus;
-    document.getElementById('recProvince').textContent = record.availabilityStatus === 'Inside KSA' ? (record.province || '-') : '-';
+    var provRow = document.getElementById('recProvinceRow');
+    if (record.availabilityStatus === 'Inside KSA') {
+      document.getElementById('recProvince').textContent = record.province || '-';
+      provRow.hidden = false;
+    } else {
+      provRow.hidden = true;
+    }
   },
 
   hideReceivedDialog() {
