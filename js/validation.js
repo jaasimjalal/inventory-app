@@ -25,6 +25,10 @@ const Validator = {
       errors.push({ field: 'chassis', message: 'Chassis is required.' });
     }
 
+    if (!record.model || !record.model.trim()) {
+      errors.push({ field: 'model', message: 'Model is required.' });
+    }
+
     if (!record.typeOfWork) {
       errors.push({ field: 'typeOfWork', message: 'Type of Work is required.' });
     }
