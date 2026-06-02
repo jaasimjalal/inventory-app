@@ -1588,12 +1588,13 @@ tbody tr {
 
   tbody td::before {
     content: attr(data-label);
-    flex: 0 0 70px;
+    flex: 0 0 90px;
     font-weight: 600;
     color: var(--text-secondary);
     font-size: 0.72rem;
     text-transform: uppercase;
     letter-spacing: 0.03em;
+    white-space: nowrap;
   }
 
   tbody td[data-label=""]::before {
