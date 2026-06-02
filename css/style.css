@@ -1247,9 +1247,8 @@ tbody tr {
 }
 
 .master-header .master-search-bar {
-  flex: 1;
-  min-width: 0;
-  margin: 0;
+  margin-left: auto;
+  width: 180px;
 }
 
 .master-header .master-search-bar input {
@@ -1368,7 +1367,7 @@ tbody tr {
   }
 
   .master-header .master-search-bar {
-    flex: 0 0 130px;
+    width: 130px;
   }
 
   .layout-left .form-section.card {
