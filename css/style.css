@@ -1314,14 +1314,22 @@ tbody tr {
     grid-template-columns: 1fr;
   }
 
+  .master-table .actions-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    white-space: normal;
+  }
+
   .master-table .actions-col .action-pill {
-    padding: 0.2rem 0.4rem;
-    font-size: 0.68rem;
+    width: 100%;
+    padding: 0.25rem 0.4rem;
+    font-size: 0.7rem;
   }
 
   .master-table .actions-col .action-pill .btn-edit,
   .master-table .actions-col .action-pill .btn-delete {
-    font-size: 0.68rem;
+    font-size: 0.7rem;
   }
 
   .layout-left   .form-section.card {
