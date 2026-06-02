@@ -1314,16 +1314,39 @@ tbody tr {
     grid-template-columns: 1fr;
   }
 
-  .master-table .actions-col {
+  .master-table tbody td.actions-col::before {
+    content: none;
+  }
+
+  .master-table tbody tr {
     display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    white-space: normal;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .master-table tbody td {
+    border: none;
+    padding: 0;
+  }
+
+  .master-table tbody td.master-name-cell {
+    flex: 1;
+  }
+
+  .master-table tbody td.master-name-cell::before {
+    content: attr(data-label);
+  }
+
+  .master-table tbody td.actions-col {
+    display: flex;
+    flex-direction: row;
+    gap: 0.35rem;
+    flex-shrink: 0;
   }
 
   .master-table .actions-col .action-pill {
-    width: 100%;
-    padding: 0.25rem 0.4rem;
+    padding: 0.2rem 0.45rem;
     font-size: 0.7rem;
   }
 
@@ -1332,7 +1355,7 @@ tbody tr {
     font-size: 0.7rem;
   }
 
-  .layout-left   .form-section.card {
+  .layout-left .form-section.card {
     padding: 0.85rem;
   }
 

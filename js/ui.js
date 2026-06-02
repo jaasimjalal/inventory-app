@@ -428,8 +428,8 @@ const UI = {
     for (var i = 0; i < pageItems.length; i++) {
       var m = pageItems[i];
       html += '<tr data-master-id="' + m.id + '">';
-      html += '<td class="master-name-cell">' + this._esc(m.name) + '</td>';
-      html += '<td class="actions-col">';
+      html += '<td class="master-name-cell" data-label="Name">' + this._esc(m.name) + '</td>';
+      html += '<td class="actions-col" data-label="">';
       html += '<span class="action-pill edit-pill"><button class="btn btn-small btn-edit master-edit-btn" data-id="' + m.id + '" data-type="model" title="Edit">&#9998; Edit</button></span> ';
       html += '<span class="action-pill delete-pill"><button class="btn btn-small btn-delete master-delete-btn" data-id="' + m.id + '" data-type="model" title="Delete">&#128465; Delete</button></span>';
       html += '</td>';
@@ -474,8 +474,8 @@ const UI = {
     for (var i = 0; i < pageItems.length; i++) {
       var p = pageItems[i];
       html += '<tr data-master-id="' + p.id + '">';
-      html += '<td class="master-name-cell">' + this._esc(p.name) + '</td>';
-      html += '<td class="actions-col">';
+      html += '<td class="master-name-cell" data-label="Name">' + this._esc(p.name) + '</td>';
+      html += '<td class="actions-col" data-label="">';
       html += '<span class="action-pill edit-pill"><button class="btn btn-small btn-edit master-edit-btn" data-id="' + p.id + '" data-type="province" title="Edit">&#9998; Edit</button></span> ';
       html += '<span class="action-pill delete-pill"><button class="btn btn-small btn-delete master-delete-btn" data-id="' + p.id + '" data-type="province" title="Delete">&#128465; Delete</button></span>';
       html += '</td>';
