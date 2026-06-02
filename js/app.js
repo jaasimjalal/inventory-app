@@ -139,6 +139,8 @@ const App = {
     });
   },
 
+  _editingMaster: null,
+
   setupMasterEventListeners() {
     var self = this;
 
@@ -150,12 +152,20 @@ const App = {
       if (e.key === 'Enter') { e.preventDefault(); self._addMasterItem('model'); }
     });
 
+    document.getElementById('cancelModelEditBtn').addEventListener('click', function() {
+      self._cancelMasterEdit('model');
+    });
+
     document.getElementById('addProvinceBtn').addEventListener('click', function() {
       self._addMasterItem('province');
     });
 
     document.getElementById('masterProvinceInput').addEventListener('keydown', function(e) {
       if (e.key === 'Enter') { e.preventDefault(); self._addMasterItem('province'); }
+    });
+
+    document.getElementById('cancelProvinceEditBtn').addEventListener('click', function() {
+      self._cancelMasterEdit('province');
     });
 
     document.getElementById('masterModelsBody').addEventListener('click', function(e) {
@@ -206,37 +216,17 @@ const App = {
     if (!id) return;
 
     if (btn.classList.contains('master-edit-btn')) {
-      var row = btn.closest('tr');
-      var nameCell = row.querySelector('.master-name-cell');
-      var currentName = nameCell.textContent;
-      row.classList.add('editing');
-      nameCell.innerHTML = '<div class="master-edit-row"><input type="text" class="master-edit-input" value="' + currentName + '"><button class="btn btn-small btn-primary master-save-btn" data-id="' + id + '" data-type="' + type + '">Save</button><button class="btn btn-small btn-secondary master-cancel-btn">Cancel</button></div>';
-    }
-
-    if (btn.classList.contains('master-save-btn')) {
-      var row = btn.closest('tr');
-      var input = row.querySelector('.master-edit-input');
-      var newName = input.value.trim();
-      if (!newName) return;
       var collection = type === 'model' ? MasterDB.getModels() : MasterDB.getProvinces();
-      var exists = collection.some(function(item) { return item.name.toLowerCase() === newName.toLowerCase() && item.id !== id; });
-      if (exists) {
-        UI.showNotification('Duplicate name.', 'error');
-        return;
-      }
-      if (type === 'model') {
-        MasterDB.updateModel(id, newName);
-        UI.populateModelDropdown();
-      } else {
-        MasterDB.updateProvince(id, newName);
-        UI.populateProvinceDropdown();
-      }
-      UI.renderMasterTables();
-      UI.showNotification(type.charAt(0).toUpperCase() + type.slice(1) + ' updated.', 'success');
-    }
-
-    if (btn.classList.contains('master-cancel-btn')) {
-      UI.renderMasterTables();
+      var item = collection.find(function(it) { return it.id === id; });
+      if (!item) return;
+      var inputId = type === 'model' ? 'masterModelInput' : 'masterProvinceInput';
+      var btnId = type === 'model' ? 'addModelBtn' : 'addProvinceBtn';
+      var cancelId = type === 'model' ? 'cancelModelEditBtn' : 'cancelProvinceEditBtn';
+      document.getElementById(inputId).value = item.name;
+      document.getElementById(inputId).focus();
+      document.getElementById(btnId).textContent = 'Update';
+      document.getElementById(cancelId).hidden = false;
+      this._editingMaster = { type: type, id: id };
     }
 
     if (btn.classList.contains('master-delete-btn')) {
@@ -263,22 +253,52 @@ const App = {
       UI.showNotification('Please enter a name.', 'error');
       return;
     }
-    var collection = type === 'model' ? MasterDB.getModels() : MasterDB.getProvinces();
-    var exists = collection.some(function(item) { return item.name.toLowerCase() === name.toLowerCase(); });
-    if (exists) {
-      UI.showNotification(type.charAt(0).toUpperCase() + type.slice(1) + ' already exists.', 'error');
-      return;
-    }
-    if (type === 'model') {
-      MasterDB.addModel(name);
-      UI.populateModelDropdown();
+
+    var editing = this._editingMaster && this._editingMaster.type === type;
+
+    if (editing) {
+      var collection = type === 'model' ? MasterDB.getModels() : MasterDB.getProvinces();
+      var exists = collection.some(function(item) { return item.name.toLowerCase() === name.toLowerCase() && item.id !== this._editingMaster.id; }.bind(this));
+      if (exists) {
+        UI.showNotification('Duplicate name.', 'error');
+        return;
+      }
+      if (type === 'model') {
+        MasterDB.updateModel(this._editingMaster.id, name);
+        UI.populateModelDropdown();
+      } else {
+        MasterDB.updateProvince(this._editingMaster.id, name);
+        UI.populateProvinceDropdown();
+      }
     } else {
-      MasterDB.addProvince(name);
-      UI.populateProvinceDropdown();
+      var collection = type === 'model' ? MasterDB.getModels() : MasterDB.getProvinces();
+      var exists = collection.some(function(item) { return item.name.toLowerCase() === name.toLowerCase(); });
+      if (exists) {
+        UI.showNotification(type.charAt(0).toUpperCase() + type.slice(1) + ' already exists.', 'error');
+        return;
+      }
+      if (type === 'model') {
+        MasterDB.addModel(name);
+        UI.populateModelDropdown();
+      } else {
+        MasterDB.addProvince(name);
+        UI.populateProvinceDropdown();
+      }
     }
-    input.value = '';
+
+    this._cancelMasterEdit(type);
     UI.renderMasterTables();
-    UI.showNotification(type.charAt(0).toUpperCase() + type.slice(1) + ' added.', 'success');
+    UI.showNotification(editing ? 'Updated.' : 'Added.', 'success');
+  },
+
+  _cancelMasterEdit(type) {
+    var inputId = type === 'model' ? 'masterModelInput' : 'masterProvinceInput';
+    var btnId = type === 'model' ? 'addModelBtn' : 'addProvinceBtn';
+    var cancelId = type === 'model' ? 'cancelModelEditBtn' : 'cancelProvinceEditBtn';
+    document.getElementById(inputId).value = '';
+    document.getElementById(btnId).textContent = 'Add';
+    document.getElementById(cancelId).hidden = true;
+    this._editingMaster = null;
   },
 
   handleFormSubmit() {

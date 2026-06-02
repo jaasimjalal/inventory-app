@@ -1232,31 +1232,7 @@ tbody tr {
   text-align: right;
 }
 
-.master-edit-row {
-  display: flex;
-  gap: 0.35rem;
-  align-items: center;
-}
 
-.master-edit-row input {
-  flex: 1;
-  padding: 0.3rem 0.5rem;
-  font-size: 0.82rem;
-  font-family: var(--font);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
-  color: var(--text);
-}
-
-.master-edit-row input:focus {
-  outline: none;
-  border-color: var(--primary);
-}
-
-.master-table tr.editing .actions-col {
-  display: none;
-}
 
 .master-empty {
   text-align: center;
