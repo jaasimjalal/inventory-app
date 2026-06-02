@@ -281,7 +281,7 @@ var InventoryDB = {
     }
 
     if (filters.actionRequired) {
-      records = records.filter(function(r) { return !r.availabilityStatus || !r.received; });
+      records = records.filter(function(r) { return !r.availabilityStatus || !r.received || !r.partNumber; });
     }
 
     return records;

@@ -109,6 +109,12 @@ const App = {
       App.toggleProvinceCustom();
     });
 
+    document.getElementById('actionRequiredBtn').addEventListener('click', () => {
+      this.actionRequiredFilter = !this.actionRequiredFilter;
+      UI.currentPage = 1;
+      this.refresh();
+    });
+
     document.getElementById('exportExcelBtn').addEventListener('click', () => {
       this.exportExcel();
     });
@@ -453,7 +459,7 @@ const App = {
       receivedDateFrom: filters.receivedDateFrom,
       receivedDateTo: filters.receivedDateTo
     });
-    const actionCount = allRecords.filter(r => !r.availabilityStatus || !r.received).length;
+    const actionCount = allRecords.filter(r => !r.availabilityStatus || !r.received || !r.partNumber).length;
     document.getElementById('actionCount').textContent = actionCount;
     document.getElementById('actionRequiredBtn').classList.toggle('active', this.actionRequiredFilter);
 
